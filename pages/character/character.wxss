@@ -259,32 +259,38 @@
 }
 
 .btn-start {
-  width: 60%;
-  height: 90rpx;
-  background: #111;
+  width: 70%;
+  height: 100rpx;
+  background: linear-gradient(135deg, #3498db, #2980b9);
   color: #fff;
-  border-radius: 45rpx;
+  border-radius: 50rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 30rpx;
-  font-weight: 700;
-  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.3);
-  border: none;
-  transition: all 0.2s;
+  font-size: 34rpx;
+  font-weight: 800;
+  box-shadow: 0 10rpx 40rpx rgba(52, 152, 219, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 4rpx;
 }
 
 .btn-start:active {
-  transform: scale(0.98);
+  transform: scale(0.96);
+  box-shadow: 0 4rpx 16rpx rgba(52, 152, 219, 0.3);
+  filter: brightness(0.9);
 }
 
 .btn-start[disabled] {
-  background: #555;
-  opacity: 0.7;
+  background: #333;
+  color: #666;
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.05);
+  opacity: 1;
 }
 
 .btn-text {
-  color: #fff;
+  color: inherit;
 }
 
 .locked-overlay {

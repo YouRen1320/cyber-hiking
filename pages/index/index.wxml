@@ -46,7 +46,7 @@
         </view>
       </button>
 
-      <button class="menu-btn secondary continue-btn" bindtap="onContinueGame" wx:if="{{$game.gameState === 'playing'}}">
+      <button class="menu-btn secondary continue-btn" bindtap="onContinueGame" wx:if="{{hasSave}}">
         <view class="btn-content">
           <text class="btn-icon">🏕️</text>
           <text class="btn-text">继续徒步</text>
