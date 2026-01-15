@@ -35,6 +35,36 @@ Page({
     });
 
     this.updateLockedStatus();
+
+    // 静默预加载分包
+    this.preloadSubpackages();
+  },
+
+  /**
+   * 预加载分包
+   */
+  preloadSubpackages() {
+    const pkgs = [
+      "pkg1",
+      "pkg2",
+      "pkg3",
+      "pkg4",
+      "pkg5",
+      "pkg6",
+      "pkg7",
+      "pkg8",
+      "pkg9",
+      "pkg10",
+    ];
+
+    pkgs.forEach((name) => {
+      wx.loadSubpackage({
+        name: name,
+        fail: (res) => {
+          console.warn(`Preload ${name} failed:`, res);
+        }, // 静默加载，不阻塞用户
+      });
+    });
   },
 
   onShow() {
