@@ -2,6 +2,7 @@
 const {
   gameStore,
   getCurrentScene,
+  getCurrentLoad,
   handleChoice,
   useItem,
   unequipItem,
@@ -116,11 +117,7 @@ Page({
     }
 
     // 计算负重
-    let load = 0;
-    gameStore.data.inventory.forEach((item) => (load += item.weight || 0));
-    Object.values(gameStore.data.equipment).forEach((item) => {
-      if (item) load += item.weight || 0;
-    });
+    const load = getCurrentLoad();
 
     this.setData({
       currentScene: scene,

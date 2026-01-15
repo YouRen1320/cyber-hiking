@@ -2,6 +2,7 @@
 const { gameStore, loadGame, initGame } = require("../../lib/core/game.js");
 const { metaStore, loadMeta } = require("../../lib/core/meta.js");
 const audio = require("../../lib/utils/audio.js");
+const { STATIC_BASE_URL } = require("../../lib/utils/backgrounds.js");
 
 Page({
   data: {
@@ -11,9 +12,14 @@ Page({
     isMusicOn: false,
     showAboutModal: false,
     $game: null,
+    bgImage: "",
   },
 
   onLoad() {
+    this.setData({
+      bgImage: `${STATIC_BASE_URL}/back_ground.png`,
+    });
+
     // 生成雪花
     this.generateSnowflakes();
 

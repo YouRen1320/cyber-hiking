@@ -46,9 +46,11 @@
   position: relative;
   z-index: 10;
   padding: 84rpx 180rpx 24rpx 32rpx;
-  background: linear-gradient(180deg,
-      rgba(0, 0, 0, 0.9) 0%,
-      rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -78,6 +80,14 @@
   margin-right: 16rpx;
   letter-spacing: 2rpx;
   color: #fff;
+}
+
+.time-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  font-family: monospace;
+  color: #3498db;
+  margin-right: 16rpx;
 }
 
 .weather-icon {
@@ -246,7 +256,6 @@
 }
 
 @keyframes blink {
-
   0%,
   100% {
     opacity: 1;
@@ -263,9 +272,11 @@
   z-index: 20;
   padding: 20rpx 40rpx 60rpx;
   /* 底部留白 */
-  background: linear-gradient(0deg,
-      rgba(0, 0, 0, 0.9) 0%,
-      rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 .action-bar.disabled {

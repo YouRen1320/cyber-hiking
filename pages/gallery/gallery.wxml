@@ -1,5 +1,4 @@
-<view class="container" style="background-image: url('{{bgImage}}')">
-  <view class="glass-overlay"></view>
+<view class="container">
   
   <view class="nav-header">
     <view class="back-btn" bindtap="onBack">

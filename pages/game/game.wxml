@@ -23,6 +23,7 @@
     <view class="hud-left-panel">
       <view class="day-weather-badge">
         <text class="day-text">DAY {{$game.player.days}}</text>
+        <text class="time-text">{{utils.formatTime($game.status.time)}}</text>
         <text class="weather-icon">{{weatherIcon}}</text>
       </view>
       <!-- 探索进度 -->

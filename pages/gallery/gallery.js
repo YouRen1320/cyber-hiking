@@ -5,7 +5,6 @@ const { STATIC_BASE_URL } = require("../../lib/utils/backgrounds");
 
 Page({
   data: {
-    bgImage: "",
     eggs: [],
     endings: [],
     unlockedCount: 0,
@@ -16,9 +15,7 @@ Page({
   },
 
   onLoad() {
-    this.setData({
-      bgImage: `${STATIC_BASE_URL}/assets/images/bg_gallery.jpg`,
-    });
+    // No specific initialization needed for now
   },
 
   onShow() {
@@ -41,10 +38,6 @@ Page({
   },
 
   initEndings() {
-    // Ideally this should come from metaStore, e.g. metaStore.data.unlockedEndings
-    // If not yet implemented in meta.js, we might need to add it or infer it.
-    // Assuming metaStore has an array of unlocked ending IDs.
-    // For now, let's assume it exists or default to empty if not.
     const unlocked = metaStore.data.unlockedEndings || [];
 
     const endingsList = Object.values(endings).map((ending) => ({

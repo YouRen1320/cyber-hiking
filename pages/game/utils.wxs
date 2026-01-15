@@ -10,4 +10,13 @@ module.exports = {
   floor: function (value) {
     return Math.floor(value);
   },
+  // 格式化时间 (8.5 -> 08:30)
+  formatTime: function (hour) {
+    if (hour === undefined || hour === null) return "08:00";
+    var h = Math.floor(hour);
+    var m = Math.floor((hour - h) * 60);
+    var hStr = h < 10 ? "0" + h : "" + h;
+    var mStr = m < 10 ? "0" + m : "" + m;
+    return hStr + ":" + mStr;
+  },
 };

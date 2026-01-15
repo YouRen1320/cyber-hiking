@@ -7,7 +7,10 @@ const {
 } = require("../../lib/core/meta.js");
 const { roles } = require("../../lib/model/roles.js");
 const { items } = require("../../lib/model/items.js");
-const { preloadCoreImages } = require("../../lib/utils/backgrounds.js");
+const {
+  preloadCoreImages,
+  STATIC_BASE_URL,
+} = require("../../lib/utils/backgrounds.js");
 
 Page({
   data: {
@@ -18,9 +21,14 @@ Page({
     loadingProgress: 0,
     loadingText: "正在前往登山口...",
     showGuide: false,
+    bgImage: "",
   },
 
   onLoad() {
+    this.setData({
+      bgImage: `${STATIC_BASE_URL}/back_ground.png`,
+    });
+
     // 加载 meta 数据
     loadMeta();
 

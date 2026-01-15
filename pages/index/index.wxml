@@ -1,6 +1,6 @@
 <view class="container">
   <!-- 背景图片 -->
-  <image class="bg-image" src="/assets/back_ground.png" mode="aspectFill"></image>
+  <image class="bg-image" src="{{bgImage}}" mode="aspectFill"></image>
   
   <!-- 渐变遮罩 -->
   <view class="overlay"></view>
@@ -17,7 +17,6 @@
   
   <!-- 音乐开关 -->
   <view class="music-toggle" bindtap="toggleMusic" style="top: {{statusBarHeight + 10}}px; left: 30rpx;">
-    <image class="music-icon {{isMusicOn ? 'playing' : ''}}" src="/assets/icons/music.svg" wx:if="{{false}}"></image>
     <text class="music-emoji">{{isMusicOn ? '🔊' : '🔇'}}</text>
   </view>
 
