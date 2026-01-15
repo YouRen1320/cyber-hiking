@@ -1,5 +1,5 @@
 <!--pages/game/game.wxml-->
-<view class="game-container">
+<view class="game-container" style="padding-top: {{statusBarHeight + 44}}px;">
   <!-- 背景层 -->
   <view class="visual-layer" style="{{visualStyle}}">
     <image class="bg-image" src="{{bgImage}}" mode="aspectFill"></image>
@@ -17,147 +17,191 @@
     </text>
   </view>
   
-  <!-- 状态栏 -->
-  <view class="status-bar">
-    <view class="status-left">
-      <text class="day-text">Day {{$game.player.days}}</text>
-      <text class="weather-icon">{{weatherIcon}}</text>
-    </view>
-    <view class="status-right">
-      <view class="progress-bar">
-        <view class="progress-fill" style="width: {{$game.progress}}%"></view>
+  <!-- 顶部状态栏区域 -->
+  <view class="top-hud">
+    <!-- 左侧：天数与天气 -->
+    <view class="hud-header">
+      <view class="day-weather-badge">
+        <text class="day-text">DAY {{$game.player.days}}</text>
+        <text class="weather-icon">{{weatherIcon}}</text>
       </view>
-      <text class="progress-text">{{$game.progress}}%</text>
+      <!-- 探索进度 -->
+      <view class="progress-container">
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{$game.progress}}%"></view>
+        </view>
+        <text class="progress-text">{{$game.progress}}%</text>
+      </view>
+    </view>
+
+    <!-- 属性条 -->
+    <view class="stat-bars">
+      <view class="stat-row">
+        <image class="stat-icon" src="/assets/icons/heart.svg" wx:if="{{false}}"></image> <!-- 预留图标位 -->
+        <text class="stat-emoji">❤️</text>
+        <view class="stat-track">
+          <view class="stat-fill hp" style="width: {{$game.status.hp / $game.status.maxHp * 100}}%"></view>
+        </view>
+        <text class="stat-value">{{$game.status.hp}}</text>
+      </view>
+      <view class="stat-row">
+        <text class="stat-emoji">🍞</text>
+        <view class="stat-track">
+          <view class="stat-fill hunger" style="width: {{$game.status.hunger / $game.status.maxHunger * 100}}%"></view>
+        </view>
+        <text class="stat-value">{{$game.status.hunger}}</text>
+      </view>
+      <view class="stat-row">
+        <text class="stat-emoji">🧠</text>
+        <view class="stat-track">
+          <view class="stat-fill sanity" style="width: {{$game.status.sanity / $game.status.maxSanity * 100}}%"></view>
+        </view>
+        <text class="stat-value">{{$game.status.sanity}}</text>
+      </view>
     </view>
   </view>
   
-  <!-- 生命值条 -->
-  <view class="stat-bars">
-    <view class="stat-row">
-      <text class="stat-icon">❤️</text>
-      <view class="stat-bar-bg">
-        <view class="stat-bar-fill hp" style="width: {{$game.status.hp / $game.status.maxHp * 100}}%"></view>
-      </view>
-      <text class="stat-value">{{$game.status.hp}}</text>
+  <!-- 背包入口按钮 (悬浮右侧，避开胶囊) -->
+  <view class="bag-fab" bindtap="toggleInventory">
+    <view class="bag-icon-wrapper">
+      <text class="bag-emoji">🎒</text>
+      <view class="bag-badge" wx:if="{{$game.inventory.length > 0}}">{{$game.inventory.length}}</view>
     </view>
-    <view class="stat-row">
-      <text class="stat-icon">🍞</text>
-      <view class="stat-bar-bg">
-        <view class="stat-bar-fill hunger" style="width: {{$game.status.hunger / $game.status.maxHunger * 100}}%"></view>
-      </view>
-      <text class="stat-value">{{$game.status.hunger}}</text>
-    </view>
-    <view class="stat-row">
-      <text class="stat-icon">🧠</text>
-      <view class="stat-bar-bg">
-        <view class="stat-bar-fill sanity" style="width: {{$game.status.sanity / $game.status.maxSanity * 100}}%"></view>
-      </view>
-      <text class="stat-value">{{$game.status.sanity}}</text>
-    </view>
-  </view>
-  
-  <!-- 背包按钮 -->
-  <view class="bag-button" bindtap="toggleInventory">
-    <text class="bag-icon">🎒</text>
-    <text class="bag-count">{{$game.inventory.length}}</text>
   </view>
   
   <!-- 通知提示 -->
-  <view wx:if="{{$game.notification.visible}}" class="notification {{$game.notification.type}}">
+  <view wx:if="{{$game.notification.visible}}" class="notification-toast {{$game.notification.type}}">
     <text>{{$game.notification.message}}</text>
   </view>
   
-  <!-- 故事文本区域 -->
-  <scroll-view scroll-y class="story-area" bindtap="onStoryTap">
-    <view class="story-content">
+  <!-- 故事文本区域 (可滚动) -->
+  <scroll-view scroll-y class="story-scroll" bindtap="onStoryTap" scroll-into-view="{{scrollTarget}}">
+    <view class="story-card">
       <text class="story-text {{isLowSanity ? 'text-distort' : ''}}">{{displayedText}}</text>
-      <text wx:if="{{isTyping}}" class="cursor">|</text>
+      <text wx:if="{{isTyping}}" class="cursor">_</text>
+      <view id="bottom-anchor"></view>
     </view>
   </scroll-view>
   
-  <!-- 选项区域 -->
-  <view class="action-area {{isTyping ? 'disabled' : ''}}">
-    <view 
-      wx:for="{{filteredChoices}}" 
-      wx:key="text" 
-      class="choice-btn" 
-      hover-class="btn-hover" 
-      bindtap="onChoiceTap" 
-      data-index="{{index}}">
-      <text class="btn-text {{isLowSanity ? 'glitch-text' : ''}}">{{item.displayText}}</text>
+  <!-- 底部选项区域 -->
+  <view class="action-bar {{isTyping ? 'disabled' : ''}}">
+    <!-- 夜间警告 -->
+    <view wx:if="{{isNight && !hasVision}}" class="night-warning-bar">
+      <text class="warning-icon">⚠️</text>
+      <text>天黑路滑，视野受限 (高风险)</text>
     </view>
-    <view wx:if="{{isNight && !hasVision}}" class="night-warning">
-      <text>⚠️ 天黑路滑，视野受限 (高风险)</text>
+
+    <view class="choices-container">
+      <view 
+        wx:for="{{filteredChoices}}" 
+        wx:key="text" 
+        class="choice-card" 
+        hover-class="card-hover" 
+        bindtap="onChoiceTap" 
+        data-index="{{index}}">
+        <view class="choice-content">
+          <text class="choice-text {{isLowSanity ? 'glitch-text' : ''}}">{{item.displayText}}</text>
+          <!-- 显示消耗预览 -->
+          <view class="cost-preview" wx:if="{{item.cost}}">
+             <text wx:if="{{item.cost.hunger}}" class="cost-tag hunger">-{{item.cost.hunger}}🍞</text>
+             <text wx:if="{{item.cost.sanity}}" class="cost-tag sanity">-{{item.cost.sanity}}🧠</text>
+          </view>
+        </view>
+        <text class="choice-arrow">></text>
+      </view>
     </view>
   </view>
   
-  <!-- 背包面板 -->
-  <view wx:if="{{showInventory}}" class="inventory-overlay" bindtap="toggleInventory">
-    <view class="inventory-panel" catchtap="preventClose">
-      <view class="panel-header">
-        <text class="panel-title">背包</text>
-        <text class="load-info">负重: {{currentLoad}} / {{$game.status.maxLoad}} kg</text>
-        <view class="close-btn" bindtap="toggleInventory">✕</view>
+  <!-- 背包面板 (全屏遮罩) -->
+  <view wx:if="{{showInventory}}" class="modal-overlay" catchtap="toggleInventory" catchtouchmove="preventMove">
+    <view class="inventory-modal" catchtap="preventClose">
+      <view class="modal-header">
+        <text class="modal-title">生存行囊</text>
+        <view class="weight-indicator">
+          <text class="weight-val {{currentLoad > $game.status.maxLoad ? 'overweight' : ''}}">{{currentLoad}}/{{$game.status.maxLoad}} kg</text>
+        </view>
       </view>
-      <scroll-view scroll-y class="inventory-list">
-        <view wx:if="{{$game.inventory.length === 0}}" class="empty-text">
-          <text>背包空空如也...</text>
+      
+      <!-- 装备栏 -->
+      <view class="equipment-grid">
+        <view class="equip-slot" bindtap="onUnequip" data-slot="head">
+          <view class="slot-bg {{gameStore.equipment.head ? 'equipped' : ''}}">
+            <text class="slot-icon">{{$game.equipment.head ? $game.equipment.head.icon : '🧢'}}</text>
+          </view>
+          <text class="slot-label">头部</text>
+        </view>
+        <view class="equip-slot" bindtap="onUnequip" data-slot="body">
+          <view class="slot-bg {{$game.equipment.body ? 'equipped' : ''}}">
+            <text class="slot-icon">{{$game.equipment.body ? $game.equipment.body.icon : '👕'}}</text>
+          </view>
+          <text class="slot-label">身体</text>
+        </view>
+        <view class="equip-slot" bindtap="onUnequip" data-slot="hand">
+           <view class="slot-bg {{$game.equipment.hand ? 'equipped' : ''}}">
+            <text class="slot-icon">{{$game.equipment.hand ? $game.equipment.hand.icon : '🦯'}}</text>
+          </view>
+          <text class="slot-label">手持</text>
+        </view>
+        <view class="equip-slot" bindtap="onUnequip" data-slot="feet">
+           <view class="slot-bg {{$game.equipment.feet ? 'equipped' : ''}}">
+            <text class="slot-icon">{{$game.equipment.feet ? $game.equipment.feet.icon : '🥾'}}</text>
+          </view>
+          <text class="slot-label">足部</text>
+        </view>
+      </view>
+
+      <view class="divider"></view>
+      
+      <!-- 物品列表 -->
+      <scroll-view scroll-y class="items-scroll">
+        <view wx:if="{{$game.inventory.length === 0}}" class="empty-state">
+          <text>背包比脸还干净...</text>
         </view>
         <view 
           wx:for="{{$game.inventory}}" 
           wx:key="id" 
-          class="inventory-item"
-          bindtap="onUseItem"
+          class="inventory-row"
+          catchtap="onUseItem"
           data-index="{{index}}">
-          <text class="item-icon">{{item.icon}}</text>
-          <view class="item-info">
-            <text class="item-name">{{item.name}}</text>
+          <view class="item-visual">
+            <text class="item-emoji">{{item.icon}}</text>
+          </view>
+          <view class="item-details">
+            <view class="item-header">
+              <text class="item-name">{{item.name}}</text>
+              <text class="item-weight">{{item.weight}}kg</text>
+            </view>
             <text class="item-desc">{{item.description}}</text>
           </view>
-          <text class="item-weight">{{item.weight}}kg</text>
+          <view class="use-btn">使用</view>
         </view>
       </scroll-view>
-      <!-- 装备槽位 -->
-      <view class="equipment-section">
-        <text class="section-title">装备</text>
-        <view class="equipment-slots">
-          <view class="equip-slot" bindtap="onUnequip" data-slot="head">
-            <text class="slot-label">头部</text>
-            <text class="slot-item">{{$game.equipment.head ? $game.equipment.head.icon : '空'}}</text>
-          </view>
-          <view class="equip-slot" bindtap="onUnequip" data-slot="body">
-            <text class="slot-label">身体</text>
-            <text class="slot-item">{{$game.equipment.body ? $game.equipment.body.icon : '空'}}</text>
-          </view>
-          <view class="equip-slot" bindtap="onUnequip" data-slot="feet">
-            <text class="slot-label">脚部</text>
-            <text class="slot-item">{{$game.equipment.feet ? $game.equipment.feet.icon : '空'}}</text>
-          </view>
-          <view class="equip-slot" bindtap="onUnequip" data-slot="hand">
-            <text class="slot-label">手持</text>
-            <text class="slot-item">{{$game.equipment.hand ? $game.equipment.hand.icon : '空'}}</text>
-          </view>
-        </view>
+      
+      <view class="modal-footer" bindtap="toggleInventory">
+        <text>关闭</text>
       </view>
     </view>
   </view>
   
   <!-- 游戏结束面板 -->
-  <view wx:if="{{$game.gameState === 'ended'}}" class="gameover-overlay">
-    <view class="gameover-panel">
-      <text class="gameover-title">旅途结束</text>
-      <text class="gameover-text">{{currentScene.text}}</text>
-      <view class="gameover-stats">
-        <text>存活天数: {{$game.player.days}}</text>
-        <text>探索进度: {{$game.progress}}%</text>
+  <view wx:if="{{$game.gameState === 'ended'}}" class="modal-overlay gameover-z">
+    <view class="gameover-card">
+      <text class="gameover-emoji">🏁</text>
+      <text class="gameover-title">旅途终点</text>
+      <text class="gameover-message">{{currentScene.text}}</text>
+      <view class="stats-summary">
+        <view class="stat-box">
+          <text class="val">{{$game.player.days}}</text>
+          <text class="label">存活天数</text>
+        </view>
+        <view class="stat-box">
+          <text class="val">{{$game.progress}}%</text>
+          <text class="label">探索进度</text>
+        </view>
       </view>
-      <view class="gameover-actions">
-        <view class="action-btn" bindtap="onRestart">
-          <text>重新开始</text>
-        </view>
-        <view class="action-btn secondary" bindtap="onBackHome">
-          <text>返回首页</text>
-        </view>
+      <view class="action-buttons">
+        <button class="primary-btn" bindtap="onRestart">重新开始</button>
+        <button class="secondary-btn" bindtap="onBackHome">返回首页</button>
       </view>
     </view>
   </view>

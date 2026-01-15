@@ -16,44 +16,53 @@
     </view>
   </view>
   
-  <!-- 内容区域 -->
-  <view class="content">
-    <!-- 音乐按钮 -->
-    <view class="music-btn" bindtap="toggleMusic">
-      <text class="icon">{{isMusicOn ? '🔊' : '🔇'}}</text>
-    </view>
-    
+  <!-- 音乐开关 (移至左上角) -->
+  <view class="music-toggle" bindtap="toggleMusic" style="top: {{statusBarHeight + 10}}px; left: 30rpx;">
+    <image class="music-icon {{isMusicOn ? 'playing' : ''}}" src="/assets/icons/music.svg" wx:if="{{false}}"></image>
+    <text class="music-emoji">{{isMusicOn ? '🔊' : '🔇'}}</text>
+  </view>
+
+  <!-- 内容区域容器 -->
+  <view class="content" style="padding-top: {{statusBarHeight + 44}}px;">
     <!-- 标题区域 -->
-    <view class="title-section">
-      <text class="main-title">徒步鳌太线</text>
-      <view class="subtitle-wrap">
-        <view class="divider-line"></view>
-        <text class="subtitle">勇闯鳌太</text>
-        <view class="divider-line"></view>
+    <view class="title-area">
+      <view class="title-main">徒步鳌太线</view>
+      <view class="title-sub">
+        <text class="separator">——</text>
+        <text class="sub-text">勇 闯 鳌 太</text>
+        <text class="separator">——</text>
       </view>
-      <view class="quote-wrap">
-        <text class="quote">"我们征服不了任何一座山，</text>
-        <text class="quote">只是山放过了我们而已。"</text>
+      <view class="title-quote">
+        "我们征服不了任何一座山，\n只是山放过了我们而已。"
       </view>
     </view>
-    
-    <!-- 按钮组 -->
-    <view class="btn-group">
-      <view class="btn btn-primary" bindtap="onStartGame">
-        <text class="btn-icon">▶</text>
-        <text class="btn-text-primary">开始徒步</text>
-      </view>
-      <view class="btn btn-secondary" bindtap="onContinueGame">
-        <text class="btn-icon-secondary">↻</text>
-        <text class="btn-text-secondary">继续徒步</text>
-      </view>
-      <view class="btn btn-secondary" bindtap="onGallery">
-        <text class="btn-icon-secondary">🏆</text>
-        <text class="btn-text-secondary">结局图鉴</text>
-      </view>
-      <view class="btn btn-text-link" bindtap="onAbout">
-        <text class="btn-icon-link">ℹ</text>
-        <text class="btn-text-link-text">关于游戏</text>
+
+    <!-- 菜单按钮区域 -->
+    <view class="menu-area">
+      <button class="menu-btn primary start-btn" bindtap="onStartGame">
+        <view class="btn-content">
+          <text class="btn-icon">🧗</text>
+          <text class="btn-text">开始徒步</text>
+        </view>
+      </button>
+
+      <button class="menu-btn secondary continue-btn" bindtap="onContinueGame" wx:if="{{$game.gameState === 'playing'}}">
+        <view class="btn-content">
+          <text class="btn-icon">🏕️</text>
+          <text class="btn-text">继续徒步</text>
+        </view>
+      </button>
+      
+      <button class="menu-btn secondary gallery-btn" bindtap="onOpenGallery">
+        <view class="btn-content">
+          <text class="btn-icon">🌌</text>
+          <text class="btn-text">结局图鉴</text>
+        </view>
+      </button>
+      
+      <view class="about-link" bindtap="onShowAbout">
+        <text class="link-icon">📜</text>
+        <text class="link-text">关于游戏</text>
       </view>
     </view>
     
@@ -61,19 +70,19 @@
     <view class="footer-warning">
       <text class="warning-text">⚠鳌太线是中国十大死亡路线之一，请敬畏自然</text>
     </view>
-    
-    <!-- 重新开始确认弹窗 -->
-    <view wx:if="{{showRestartModal}}" class="modal-overlay">
-      <view class="modal-content">
-        <text class="modal-title">重新开始</text>
-        <text class="modal-text">开始新游戏将覆盖现有存档，确定要重新开始吗？</text>
-        <view class="modal-actions">
-          <view class="modal-btn cancel" bindtap="onCancelRestart">
-            <text class="modal-btn-text">取消</text>
-          </view>
-          <view class="modal-btn confirm" bindtap="onConfirmRestart">
-            <text class="modal-btn-text highlight">确定</text>
-          </view>
+  </view>
+  
+  <!-- 重新开始确认弹窗 -->
+  <view wx:if="{{showRestartModal}}" class="modal-overlay">
+    <view class="modal-content">
+      <text class="modal-title">重新开始</text>
+      <text class="modal-text">开始新游戏将覆盖现有存档，确定要重新开始吗？</text>
+      <view class="modal-actions">
+        <view class="modal-btn cancel" bindtap="onCancelRestart">
+          <text class="modal-btn-text">取消</text>
+        </view>
+        <view class="modal-btn confirm" bindtap="onConfirmRestart">
+          <text class="modal-btn-text highlight">确定</text>
         </view>
       </view>
     </view>

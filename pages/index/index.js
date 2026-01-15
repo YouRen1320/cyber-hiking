@@ -25,7 +25,13 @@ Page({
 
     // 初始化音频
     audio.initAudio();
-    this.setData({ isMusicOn: audio.getMusicStatus() });
+
+    const sysInfo = wx.getSystemInfoSync();
+
+    this.setData({
+      isMusicOn: audio.getMusicStatus(),
+      statusBarHeight: sysInfo.statusBarHeight,
+    });
   },
 
   onShow() {
@@ -103,7 +109,10 @@ Page({
   /**
    * 结局图鉴
    */
-  onGallery() {
+  /**
+   * 结局图鉴
+   */
+  onOpenGallery() {
     wx.navigateTo({
       url: "/pages/gallery/gallery",
     });
@@ -112,10 +121,14 @@ Page({
   /**
    * 关于游戏
    */
-  onAbout() {
-    wx.showToast({
-      title: "致敬所有勇敢的攀登者",
-      icon: "none",
+  onShowAbout() {
+    wx.showModal({
+      title: "关于《徒步鳌太线》",
+      content:
+        "这是一个关于生存与挑战的文字冒险游戏。\n致敬所有勇敢的攀登者。\n\n开发者：CyberHiking Team\n根据真实路线改编，请敬畏自然。",
+      showCancel: false,
+      confirmText: "了解",
+      confirmColor: "#3498db",
     });
   },
 

@@ -6,6 +6,7 @@ const {
   useItem,
   unequipItem,
   saveGame,
+  hasVision,
 } = require("../../lib/core/game.js");
 const { metaStore } = require("../../lib/core/meta.js");
 const { weatherData } = require("../../lib/model/weather.js");
@@ -29,6 +30,7 @@ Page({
     currentLoad: 0,
     glitchChars: [],
     isChoiceProcessing: false,
+    statusBarHeight: 20, // 默认值，会被实际值覆盖
   },
 
   // 打字机相关
@@ -41,8 +43,21 @@ Page({
     gameStore.bind(this, "$game");
     metaStore.bind(this, "$meta");
 
+    // 获取状态栏高度
+    const sysInfo = wx.getSystemInfoSync();
+    this.setData({
+      statusBarHeight: sysInfo.statusBarHeight,
+    });
+
     // 初始化场景
     this.updateScene();
+  },
+
+  /**
+   * 防止滚动穿透
+   */
+  preventMove() {
+    return;
   },
 
   onShow() {
@@ -107,7 +122,7 @@ Page({
     this.setData({
       currentScene: scene,
       isNight: status.isNight,
-      hasVision: gameStore.data.hasVision(),
+      hasVision: hasVision(),
       isLowSanity: sanity <= 30,
       weatherIcon: weatherInfo ? weatherInfo.icon : "☀",
       bgImage: getBgImage(scene.bg),
