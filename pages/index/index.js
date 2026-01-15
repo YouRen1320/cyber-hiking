@@ -1,6 +1,7 @@
 // pages/index/index.js
 const { gameStore, loadGame, initGame } = require("../../lib/core/game.js");
 const { metaStore, loadMeta } = require("../../lib/core/meta.js");
+const audio = require("../../lib/utils/audio.js");
 
 Page({
   data: {
@@ -21,6 +22,10 @@ Page({
 
     // 加载 meta 数据
     loadMeta();
+
+    // 初始化音频
+    audio.initAudio();
+    this.setData({ isMusicOn: audio.getMusicStatus() });
   },
 
   onShow() {
@@ -28,6 +33,7 @@ Page({
     const saved = wx.getStorageSync("braving_aotai_save_v1");
     this.setData({
       hasSave: !!(saved && saved.currentSceneId),
+      isMusicOn: audio.getMusicStatus(),
     });
   },
 
@@ -58,14 +64,8 @@ Page({
    * 切换音乐
    */
   toggleMusic() {
-    // TODO: 音频管理器稍后实现
-    this.setData({
-      isMusicOn: !this.data.isMusicOn,
-    });
-    wx.showToast({
-      title: this.data.isMusicOn ? "音乐已开启" : "音乐已关闭",
-      icon: "none",
-    });
+    const isMusicOn = audio.toggleMusic();
+    this.setData({ isMusicOn });
   },
 
   /**

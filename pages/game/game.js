@@ -9,21 +9,7 @@ const {
 } = require("../../lib/core/game.js");
 const { metaStore } = require("../../lib/core/meta.js");
 const { weatherData } = require("../../lib/model/weather.js");
-
-// 背景图映射
-const bgImages = {
-  loc_village: "/static_pkg10/back_ground.png",
-  loc_forest: "/static_pkg10/back_ground.png",
-  loc_ridge: "/static_pkg10/back_ground.png",
-  loc_camp: "/static_pkg10/back_ground.png",
-  bg_storm: "/static_pkg10/back_ground.png",
-  bg_fog: "/static_pkg10/back_ground.png",
-  bg_snow: "/static_pkg10/back_ground.png",
-  bg_night: "/static_pkg10/back_ground.png",
-  bg_sunny: "/static_pkg10/back_ground.png",
-  // 默认背景
-  default: "/static_pkg10/back_ground.png",
-};
+const { getBgImage } = require("../../lib/utils/backgrounds.js");
 
 Page({
   data: {
@@ -37,7 +23,7 @@ Page({
     isNight: false,
     hasVision: true,
     weatherIcon: "☀",
-    bgImage: "/static_pkg10/back_ground.png",
+    bgImage: "/static_pkg10/assets/back_ground.png",
     visualStyle: "",
     filteredChoices: [],
     currentLoad: 0,
@@ -124,7 +110,7 @@ Page({
       hasVision: gameStore.data.hasVision(),
       isLowSanity: sanity <= 30,
       weatherIcon: weatherInfo ? weatherInfo.icon : "☀",
-      bgImage: bgImages[scene.bg] || bgImages.default,
+      bgImage: getBgImage(scene.bg),
       visualStyle,
       filteredChoices,
       currentLoad: load.toFixed(1),

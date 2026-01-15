@@ -1,7 +1,7 @@
 <!--pages/index/index.wxml-->
 <view class="container">
   <!-- 背景图片 -->
-  <image class="bg-image" src="/static_pkg10/back_ground.png" mode="aspectFill"></image>
+  <image class="bg-image" src="/static_pkg10/assets/back_ground.png" mode="aspectFill"></image>
   
   <!-- 渐变遮罩 -->
   <view class="overlay"></view>
