@@ -72,6 +72,22 @@
     </view>
   </view>
   
+  <!-- 关于游戏弹窗 -->
+  <view wx:if="{{showAboutModal}}" class="modal-overlay">
+    <view class="modal-content">
+      <text class="modal-title">关于《徒步鳌太线》</text>
+      <text class="modal-text" style="white-space: pre-wrap;">这是一个关于生存与挑战的文字冒险游戏。
+致敬所有勇敢的攀登者。
+
+根据真实路线改编，请敬畏自然。</text>
+      <view class="modal-actions">
+        <view class="modal-btn confirm" bindtap="onCloseAbout">
+          <text class="modal-btn-text highlight">了解</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
   <!-- 重新开始确认弹窗 -->
   <view wx:if="{{showRestartModal}}" class="modal-overlay">
     <view class="modal-content">

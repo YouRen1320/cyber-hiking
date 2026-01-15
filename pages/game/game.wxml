@@ -1,43 +1,39 @@
-<!--pages/game/game.wxml-->
-<view class="game-container" style="padding-top: {{statusBarHeight + 44}}px;">
+<view class="game-container">
   <!-- 背景层 -->
   <view class="visual-layer" style="{{visualStyle}}">
     <image class="bg-image" src="{{bgImage}}" mode="aspectFill"></image>
     <view wx:if="{{isNight}}" class="night-overlay"></view>
   </view>
-  
+
   <!-- 受伤闪红效果 -->
   <view class="damage-flash {{showDamageFlash ? 'active' : ''}}"></view>
-  
+
   <!-- 低理智故障效果 -->
   <view wx:if="{{isLowSanity}}" class="glitch-overlay">
-    <text wx:for="{{glitchChars}}" wx:key="index" class="glitch-char" 
-          style="top:{{item.top}}%; left:{{item.left}}%; font-size:{{item.size}}rpx; opacity:{{item.opacity}}; transform:rotate({{item.rotate}}deg);">
+    <text wx:for="{{glitchChars}}" wx:key="index" class="glitch-char"
+      style="top:{{item.top}}%; left:{{item.left}}%; font-size:{{item.size}}rpx; opacity:{{item.opacity}}; transform:rotate({{item.rotate}}deg);">
       {{item.char}}
     </text>
   </view>
-  
+
   <!-- 顶部状态栏区域 -->
   <view class="top-hud">
-    <!-- 左侧：天数与天气 -->
-    <view class="hud-header">
+    <!-- 左侧：信息面板 (天数/天气/进度) -->
+    <view class="hud-left-panel">
       <view class="day-weather-badge">
         <text class="day-text">DAY {{$game.player.days}}</text>
         <text class="weather-icon">{{weatherIcon}}</text>
       </view>
       <!-- 探索进度 -->
-      <view class="progress-container">
-        <view class="progress-bar">
-          <view class="progress-fill" style="width: {{$game.progress}}%"></view>
-        </view>
-        <text class="progress-text">{{$game.progress}}%</text>
+      <view class="progress-badge">
+        <text class="progress-label">探索</text>
+        <text class="progress-val">{{$game.progress}}%</text>
       </view>
     </view>
 
-    <!-- 属性条 -->
+    <!-- 右侧：属性条 -->
     <view class="stat-bars">
       <view class="stat-row">
-        <image class="stat-icon" src="/assets/icons/heart.svg" wx:if="{{false}}"></image> <!-- 预留图标位 -->
         <text class="stat-emoji">❤️</text>
         <view class="stat-track">
           <view class="stat-fill hp" style="width: {{$game.status.hp / $game.status.maxHp * 100}}%"></view>
@@ -60,20 +56,12 @@
       </view>
     </view>
   </view>
-  
-  <!-- 背包入口按钮 (悬浮右侧，避开胶囊) -->
-  <view class="bag-fab" bindtap="toggleInventory">
-    <view class="bag-icon-wrapper">
-      <text class="bag-emoji">🎒</text>
-      <view class="bag-badge" wx:if="{{$game.inventory.length > 0}}">{{$game.inventory.length}}</view>
-    </view>
-  </view>
-  
+
   <!-- 通知提示 -->
   <view wx:if="{{$game.notification.visible}}" class="notification-toast {{$game.notification.type}}">
     <text>{{$game.notification.message}}</text>
   </view>
-  
+
   <!-- 故事文本区域 (可滚动) -->
   <scroll-view scroll-y class="story-scroll" bindtap="onStoryTap" scroll-into-view="{{scrollTarget}}">
     <view class="story-card">
@@ -82,7 +70,15 @@
       <view id="bottom-anchor"></view>
     </view>
   </scroll-view>
-  
+
+  <!-- 背包入口按钮 (悬浮右侧，避开胶囊) -->
+  <view class="bag-fab" bindtap="toggleInventory">
+    <view class="bag-icon-wrapper">
+      <text class="bag-emoji">🎒</text>
+      <view class="bag-badge" wx:if="{{$game.inventory.length > 0}}">{{$game.inventory.length}}</view>
+    </view>
+  </view>
+
   <!-- 底部选项区域 -->
   <view class="action-bar {{isTyping ? 'disabled' : ''}}">
     <!-- 夜间警告 -->
@@ -92,36 +88,29 @@
     </view>
 
     <view class="choices-container">
-      <view 
-        wx:for="{{filteredChoices}}" 
-        wx:key="text" 
-        class="choice-card" 
-        hover-class="card-hover" 
-        bindtap="onChoiceTap" 
-        data-index="{{index}}">
+      <view wx:for="{{filteredChoices}}" wx:key="text" class="choice-card" hover-class="card-hover"
+        bindtap="onChoiceTap" data-index="{{index}}">
         <view class="choice-content">
           <text class="choice-text {{isLowSanity ? 'glitch-text' : ''}}">{{item.displayText}}</text>
-          <!-- 显示消耗预览 -->
-          <view class="cost-preview" wx:if="{{item.cost}}">
-             <text wx:if="{{item.cost.hunger}}" class="cost-tag hunger">-{{item.cost.hunger}}🍞</text>
-             <text wx:if="{{item.cost.sanity}}" class="cost-tag sanity">-{{item.cost.sanity}}🧠</text>
-          </view>
+
         </view>
         <text class="choice-arrow">></text>
       </view>
     </view>
   </view>
-  
+
   <!-- 背包面板 (全屏遮罩) -->
   <view wx:if="{{showInventory}}" class="modal-overlay" catchtap="toggleInventory" catchtouchmove="preventMove">
     <view class="inventory-modal" catchtap="preventClose">
       <view class="modal-header">
         <text class="modal-title">生存行囊</text>
         <view class="weight-indicator">
-          <text class="weight-val {{currentLoad > $game.status.maxLoad ? 'overweight' : ''}}">{{currentLoad}}/{{$game.status.maxLoad}} kg</text>
+          <text
+            class="weight-val {{currentLoad > $game.status.maxLoad ? 'overweight' : ''}}">{{currentLoad}}/{{$game.status.maxLoad}}
+            kg</text>
         </view>
       </view>
-      
+
       <!-- 装备栏 -->
       <view class="equipment-grid">
         <view class="equip-slot" bindtap="onUnequip" data-slot="head">
@@ -137,13 +126,13 @@
           <text class="slot-label">身体</text>
         </view>
         <view class="equip-slot" bindtap="onUnequip" data-slot="hand">
-           <view class="slot-bg {{$game.equipment.hand ? 'equipped' : ''}}">
+          <view class="slot-bg {{$game.equipment.hand ? 'equipped' : ''}}">
             <text class="slot-icon">{{$game.equipment.hand ? $game.equipment.hand.icon : '🦯'}}</text>
           </view>
           <text class="slot-label">手持</text>
         </view>
         <view class="equip-slot" bindtap="onUnequip" data-slot="feet">
-           <view class="slot-bg {{$game.equipment.feet ? 'equipped' : ''}}">
+          <view class="slot-bg {{$game.equipment.feet ? 'equipped' : ''}}">
             <text class="slot-icon">{{$game.equipment.feet ? $game.equipment.feet.icon : '🥾'}}</text>
           </view>
           <text class="slot-label">足部</text>
@@ -151,17 +140,13 @@
       </view>
 
       <view class="divider"></view>
-      
+
       <!-- 物品列表 -->
       <scroll-view scroll-y class="items-scroll">
         <view wx:if="{{$game.inventory.length === 0}}" class="empty-state">
           <text>背包比脸还干净...</text>
         </view>
-        <view 
-          wx:for="{{$game.inventory}}" 
-          wx:key="id" 
-          class="inventory-row"
-          catchtap="onUseItem"
+        <view wx:for="{{$game.inventory}}" wx:key="id" class="inventory-row" catchtap="onUseItem"
           data-index="{{index}}">
           <view class="item-visual">
             <text class="item-emoji">{{item.icon}}</text>
@@ -176,13 +161,13 @@
           <view class="use-btn">使用</view>
         </view>
       </scroll-view>
-      
+
       <view class="modal-footer" bindtap="toggleInventory">
         <text>关闭</text>
       </view>
     </view>
   </view>
-  
+
   <!-- 游戏结束面板 -->
   <view wx:if="{{$game.gameState === 'ended'}}" class="modal-overlay gameover-z">
     <view class="gameover-card">

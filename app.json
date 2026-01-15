@@ -8,8 +8,8 @@
   ],
   "window": {
     "navigationBarTextStyle": "white",
-    "navigationBarTitleText": "勇闯鳌太",
     "navigationBarBackgroundColor": "#1a1a1a",
+    "navigationStyle": "custom",
     "backgroundColor": "#0a0a0a"
   },
   "style": "v2",

@@ -231,18 +231,15 @@ page {
   z-index: 10;
   flex-shrink: 0;
   padding: 20rpx 0 60rpx;
-  padding-bottom: calc(60rpx + env(safe-area-inset-bottom));
   display: flex;
   justify-content: center;
   background: linear-gradient(0deg, rgba(10, 10, 15, 0.95), transparent);
-  /* 底部渐变遮盖 */
 }
 
 .back-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16rpx;
   width: 280rpx;
   height: 88rpx;
   background: rgba(255, 255, 255, 0.1);
@@ -266,5 +263,4 @@ page {
 
 .back-icon {
   font-size: 32rpx;
-  margin-top: -4rpx;
 }

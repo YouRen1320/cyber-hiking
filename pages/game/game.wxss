@@ -1,5 +1,3 @@
-/* pages/game/game.wxss */
-
 /* === 基础容器 === */
 .game-container {
   width: 100%;
@@ -28,7 +26,8 @@
 .bg-image {
   width: 100%;
   height: 100%;
-  opacity: 0.5; /* 降低背景亮度，突出文字 */
+  opacity: 0.5;
+  /* 降低背景亮度，突出文字 */
   filter: saturate(0.8) contrast(1.1);
 }
 
@@ -46,141 +45,143 @@
 .top-hud {
   position: relative;
   z-index: 10;
-  padding: 20rpx 32rpx;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  padding: 84rpx 180rpx 24rpx 32rpx;
+  background: linear-gradient(180deg,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.hud-header {
+/* 左侧面板 */
+.hud-left-panel {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24rpx;
+  flex-direction: column;
+  gap: 16rpx;
 }
 
 .day-weather-badge {
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.1);
-  padding: 8rpx 20rpx;
+  padding: 10rpx 24rpx;
   border-radius: 30rpx;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  align-self: flex-start;
 }
 
 .day-text {
-  font-size: 28rpx;
-  font-weight: 700;
-  margin-right: 12rpx;
-  letter-spacing: 1px;
+  font-size: 32rpx;
+  font-weight: 800;
+  margin-right: 16rpx;
+  letter-spacing: 2rpx;
+  color: #fff;
 }
 
 .weather-icon {
-  font-size: 32rpx;
+  font-size: 36rpx;
 }
 
-.progress-container {
+/* 进度徽章 (替代原有进度条) */
+.progress-badge {
   display: flex;
   align-items: center;
-  gap: 16rpx;
+  gap: 12rpx;
+  padding-left: 8rpx;
 }
 
-.progress-bar {
-  width: 200rpx;
-  height: 8rpx;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 4rpx;
-  overflow: hidden;
+.progress-label {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 2rpx;
 }
 
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #3498db, #2ecc71);
-  border-radius: 4rpx;
-  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.progress-text {
-  font-size: 24rpx;
-  color: rgba(255, 255, 255, 0.7);
+.progress-val {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #3498db;
   font-family: monospace;
 }
 
-/* 属性条 */
+/* 右侧属性条 */
 .stat-bars {
   display: flex;
   flex-direction: column;
-  gap: 12rpx;
+  gap: 14rpx;
+  width: 260rpx;
+  /* 限制宽度 */
 }
 
 .stat-row {
   display: flex;
   align-items: center;
-  gap: 16rpx;
+  gap: 12rpx;
 }
 
 .stat-emoji {
-  font-size: 24rpx;
+  font-size: 22rpx;
   width: 30rpx;
   text-align: center;
 }
 
 .stat-track {
   flex: 1;
-  height: 12rpx;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 6rpx;
+  height: 8rpx;
+  /* 变细 */
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4rpx;
   overflow: hidden;
 }
 
 .stat-fill {
   height: 100%;
-  border-radius: 6rpx;
+  border-radius: 4rpx;
   transition: width 0.3s ease-out;
 }
 
 .stat-fill.hp {
-  background: linear-gradient(90deg, #ff4d4d, #c0392b);
+  background: #ff4d4d;
 }
+
 .stat-fill.hunger {
-  background: linear-gradient(90deg, #f1c40f, #e67e22);
+  background: #f1c40f;
 }
+
 .stat-fill.sanity {
-  background: linear-gradient(90deg, #5dade2, #2980b9);
+  background: #5dade2;
 }
 
 .stat-value {
-  width: 50rpx;
+  width: 40rpx;
   text-align: right;
-  font-size: 26rpx; /* 增大字号 */
-  font-weight: 600; /* 加粗 */
-  color: rgba(255, 255, 255, 0.9); /* 更亮 */
+  font-size: 22rpx;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
   font-family: monospace;
-  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
 }
 
 /* === 悬浮按钮 === */
 .bag-fab {
-  position: fixed; /* 改为 fixed 以便相对于屏幕定位 */
-  right: 40rpx;
-  bottom: 300rpx; /* 位于选项上方，避开底部操作区 */
+  margin-top: auto;
+  margin-right: 40rpx;
+  margin-left: auto;
   z-index: 50;
 }
 
 .bag-icon-wrapper {
   width: 100rpx;
   height: 100rpx;
-  background: rgba(30, 30, 30, 0.85); /* 加深背景 */
+  background: rgba(30, 30, 30, 0.85);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.5); /* 增强阴影 */
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.5);
   transition: transform 0.1s, background 0.2s;
 }
 
@@ -190,7 +191,8 @@
 }
 
 .bag-emoji {
-  font-size: 48rpx; /* 稍微放大图标 */
+  font-size: 48rpx;
+  /* 稍微放大图标 */
 }
 
 .bag-badge {
@@ -215,12 +217,10 @@
   flex: 1;
   position: relative;
   z-index: 10;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .story-card {
-  margin: 30rpx 40rpx;
+  margin: 0 40rpx;
   padding: 40rpx;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
@@ -246,10 +246,12 @@
 }
 
 @keyframes blink {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0;
   }
@@ -259,12 +261,11 @@
 .action-bar {
   position: relative;
   z-index: 20;
-  padding: 20rpx 40rpx 60rpx; /* 底部留白 */
-  background: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  padding: 20rpx 40rpx 60rpx;
+  /* 底部留白 */
+  background: linear-gradient(0deg,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0) 100%);
 }
 
 .action-bar.disabled {
@@ -344,6 +345,7 @@
   background: rgba(241, 196, 15, 0.2);
   color: #f1c40f;
 }
+
 .cost-tag.sanity {
   background: rgba(52, 152, 219, 0.2);
   color: #3498db;
@@ -511,6 +513,7 @@
   color: #aaa;
   font-family: monospace;
 }
+
 .weight-val.overweight {
   color: #e74c3c;
 }
@@ -549,6 +552,7 @@
 .slot-icon {
   font-size: 40rpx;
 }
+
 .slot-label {
   font-size: 22rpx;
   color: #666;
@@ -618,10 +622,12 @@
   color: #eee;
   font-weight: 500;
 }
+
 .item-weight {
   font-size: 20rpx;
   color: #666;
 }
+
 .item-desc {
   font-size: 22rpx;
   color: #888;
@@ -658,15 +664,18 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
+
 @keyframes slideUp {
   from {
     transform: translateY(40px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -686,6 +695,7 @@
   z-index: 50;
   transition: opacity 0.15s;
 }
+
 .damage-flash.active {
   opacity: 1;
 }
@@ -702,14 +712,17 @@
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.3);
   animation: toastPop 0.3s ease-out;
 }
+
 .notification-toast text {
   color: #fff;
   font-size: 26rpx;
 }
+
 .notification-toast.success {
   border: 1px solid #2ecc71;
   color: #2ecc71;
 }
+
 .notification-toast.warning {
   border: 1px solid #f1c40f;
   color: #f1c40f;
@@ -720,6 +733,7 @@
     transform: translateX(-50%) scale(0.9);
     opacity: 0;
   }
+
   100% {
     transform: translateX(-50%) scale(1);
     opacity: 1;

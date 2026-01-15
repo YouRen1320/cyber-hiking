@@ -9,6 +9,7 @@ Page({
     hasSave: false,
     showRestartModal: false,
     isMusicOn: false,
+    showAboutModal: false,
     $game: null,
   },
 
@@ -122,14 +123,11 @@ Page({
    * 关于游戏
    */
   onShowAbout() {
-    wx.showModal({
-      title: "关于《徒步鳌太线》",
-      content:
-        "这是一个关于生存与挑战的文字冒险游戏。\n致敬所有勇敢的攀登者。\n\n开发者：CyberHiking Team\n根据真实路线改编，请敬畏自然。",
-      showCancel: false,
-      confirmText: "了解",
-      confirmColor: "#3498db",
-    });
+    this.setData({ showAboutModal: true });
+  },
+
+  onCloseAbout() {
+    this.setData({ showAboutModal: false });
   },
 
   /**

@@ -12,38 +12,34 @@
       <text class="count-value">{{unlockedCount}} / {{totalCount}}</text>
     </view>
   </view>
-  
+
   <scroll-view scroll-y class="endings-list" enable-flex>
-    <view 
-      wx:for="{{endings}}" 
-      wx:key="id" 
-      class="ending-card {{item.unlocked ? 'unlocked' : 'locked'}}">
-      
+    <view wx:for="{{endings}}" wx:key="id" class="ending-card {{item.unlocked ? 'unlocked' : 'locked'}}">
+
       <!-- 状态图标 -->
       <view class="card-icon-wrapper">
         <text class="card-icon">{{item.unlocked ? item.icon : '🔒'}}</text>
       </view>
-      
+
       <!-- 内容信息 -->
       <view class="card-content">
         <view class="card-header">
-           <text class="card-name">{{item.unlocked ? item.name : '未知结局'}}</text>
-           <view wx:if="{{item.unlocked}}" class="unlock-tag">已达成</view>
+          <text class="card-name">{{item.unlocked ? item.name : '未知结局'}}</text>
+          <view wx:if="{{item.unlocked}}" class="unlock-tag">已达成</view>
         </view>
         <text class="card-desc">{{item.unlocked ? item.desc : '探索更多可能性以解锁此档案...'}}</text>
       </view>
-      
+
       <!-- 装饰线 -->
       <view class="card-deco"></view>
     </view>
-    
+
     <!-- 底部占位，防止最后一张卡片贴底 -->
     <view style="height: 40rpx;"></view>
   </scroll-view>
-  
+
   <view class="footer-action">
     <view class="back-btn" bindtap="onBack">
-      <text class="back-icon">↩</text>
       <text>返回营地</text>
     </view>
   </view>
