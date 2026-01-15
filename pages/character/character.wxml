@@ -1,0 +1,93 @@
+<!--pages/character/character.wxml-->
+<view class="container">
+  <!-- 背景图片 -->
+  <image class="bg-image" src="/static_pkg10/back_ground.png" mode="aspectFill"></image>
+  
+  <!-- 渐变遮罩 -->
+  <view class="overlay"></view>
+  <view class="vignette"></view>
+  
+  <!-- 头部 -->
+  <view class="header">
+    <text class="title">身份抉择</text>
+    <text class="subtitle">Who are you?</text>
+  </view>
+  
+  <!-- 角色轮播 -->
+  <swiper 
+    class="role-swiper" 
+    current="{{currentIndex}}" 
+    bindchange="onSwiperChange"
+    previous-margin="50rpx" 
+    next-margin="50rpx">
+    <swiper-item wx:for="{{roleList}}" wx:key="id" class="swiper-item">
+      <view class="role-card {{index === currentIndex ? 'active' : ''}}">
+        <!-- 角色头部 -->
+        <view class="role-header">
+          <view class="avatar-box">
+            <text class="avatar">{{item.avatar}}</text>
+          </view>
+          <view class="role-info">
+            <text class="role-name">{{item.name}}</text>
+            <text class="role-title">{{item.title}}</text>
+          </view>
+        </view>
+        
+        <view class="divider-line"></view>
+        
+        <!-- 角色描述 -->
+        <scroll-view scroll-y class="desc-box">
+          <text class="role-desc">{{item.description}}</text>
+        </scroll-view>
+        
+        <!-- 属性面板 -->
+        <view class="stats-panel">
+          <view class="stat-row">
+            <text class="label">体能</text>
+            <view class="progress-bg">
+              <view class="progress-fill hp" style="width: {{item.stats.maxHp / 150 * 100}}%"></view>
+            </view>
+            <text class="value">{{item.stats.maxHp}}</text>
+          </view>
+          <view class="stat-row">
+            <text class="label">意志</text>
+            <view class="progress-bg">
+              <view class="progress-fill sanity" style="width: {{item.stats.maxSanity / 150 * 100}}%"></view>
+            </view>
+            <text class="value">{{item.stats.maxSanity}}</text>
+          </view>
+        </view>
+        
+        <!-- 初始装备 -->
+        <view class="equipment-box">
+          <text class="section-title">初始装备</text>
+          <view class="items-grid">
+            <view wx:for="{{item.itemNames}}" wx:for-item="itemName" wx:key="*this" class="item-chip">
+              <text class="chip-text">{{itemName}}</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 锁定遮罩 -->
+        <view wx:if="{{item.isLocked}}" class="locked-overlay">
+          <text class="lock-icon">🔒</text>
+          <text class="lock-text">未解锁</text>
+          <text class="lock-condition">{{item.unlockCondition}}</text>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+  
+  <!-- 底部按钮 -->
+  <view class="footer">
+    <button class="btn-start" bindtap="onConfirmSelection" disabled="{{isCurrentLocked}}">
+      <text wx:if="{{!isCurrentLocked}}" class="btn-text">踏入荒野</text>
+      <text wx:else class="btn-text">无法选择</text>
+    </button>
+  </view>
+  
+  <!-- 过渡动画 -->
+  <view wx:if="{{isTransitioning}}" class="transition-overlay">
+    <text class="transition-text">正在前往登山口...</text>
+  </view>
+</view>

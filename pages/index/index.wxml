@@ -1,27 +1,81 @@
-<!--index.wxml-->
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
-        </view>
-      </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
-    </view>
-    <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 背景图片 -->
+  <image class="bg-image" src="/static_pkg10/back_ground.png" mode="aspectFill"></image>
+  
+  <!-- 渐变遮罩 -->
+  <view class="overlay"></view>
+  
+  <!-- 雪花效果 -->
+  <view class="snow-container">
+    <view 
+      wx:for="{{snowflakes}}" 
+      wx:key="id" 
+      class="snowflake" 
+      style="left:{{item.left}}%; animation-duration:{{item.duration}}s; animation-delay:-{{item.delay}}s; width:{{item.size}}rpx; height:{{item.size}}rpx; opacity:{{item.opacity}}">
     </view>
   </view>
-</scroll-view>
+  
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 音乐按钮 -->
+    <view class="music-btn" bindtap="toggleMusic">
+      <text class="icon">{{isMusicOn ? '🔊' : '🔇'}}</text>
+    </view>
+    
+    <!-- 标题区域 -->
+    <view class="title-section">
+      <text class="main-title">徒步鳌太线</text>
+      <view class="subtitle-wrap">
+        <view class="divider-line"></view>
+        <text class="subtitle">勇闯鳌太</text>
+        <view class="divider-line"></view>
+      </view>
+      <view class="quote-wrap">
+        <text class="quote">"我们征服不了任何一座山，</text>
+        <text class="quote">只是山放过了我们而已。"</text>
+      </view>
+    </view>
+    
+    <!-- 按钮组 -->
+    <view class="btn-group">
+      <view class="btn btn-primary" bindtap="onStartGame">
+        <text class="btn-icon">▶</text>
+        <text class="btn-text-primary">开始徒步</text>
+      </view>
+      <view class="btn btn-secondary" bindtap="onContinueGame">
+        <text class="btn-icon-secondary">↻</text>
+        <text class="btn-text-secondary">继续徒步</text>
+      </view>
+      <view class="btn btn-secondary" bindtap="onGallery">
+        <text class="btn-icon-secondary">🏆</text>
+        <text class="btn-text-secondary">结局图鉴</text>
+      </view>
+      <view class="btn btn-text-link" bindtap="onAbout">
+        <text class="btn-icon-link">ℹ</text>
+        <text class="btn-text-link-text">关于游戏</text>
+      </view>
+    </view>
+    
+    <!-- 警告文字 -->
+    <view class="footer-warning">
+      <text class="warning-text">⚠鳌太线是中国十大死亡路线之一，请敬畏自然</text>
+    </view>
+    
+    <!-- 重新开始确认弹窗 -->
+    <view wx:if="{{showRestartModal}}" class="modal-overlay">
+      <view class="modal-content">
+        <text class="modal-title">重新开始</text>
+        <text class="modal-text">开始新游戏将覆盖现有存档，确定要重新开始吗？</text>
+        <view class="modal-actions">
+          <view class="modal-btn cancel" bindtap="onCancelRestart">
+            <text class="modal-btn-text">取消</text>
+          </view>
+          <view class="modal-btn confirm" bindtap="onConfirmRestart">
+            <text class="modal-btn-text highlight">确定</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,31 @@
+<!--pages/journal/journal.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">冒险日志</text>
+  </view>
+  
+  <scroll-view scroll-y class="history-list">
+    <view wx:if="{{runHistory.length === 0}}" class="empty-state">
+      <text class="empty-icon">📜</text>
+      <text class="empty-text">还没有冒险记录</text>
+    </view>
+    
+    <view 
+      wx:for="{{runHistory}}" 
+      wx:key="date" 
+      class="history-card">
+      <view class="card-header">
+        <text class="role-name">{{item.roleName}}</text>
+        <text class="date">{{item.dateStr}}</text>
+      </view>
+      <view class="card-body">
+        <text class="ending">{{item.endName}}</text>
+        <text class="days">存活 {{item.days}} 天</text>
+      </view>
+    </view>
+  </scroll-view>
+  
+  <view class="back-btn" bindtap="onBack">
+    <text>返回</text>
+  </view>
+</view>

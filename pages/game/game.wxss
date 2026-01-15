@@ -1,0 +1,544 @@
+/* pages/game/game.wxss */
+
+.game-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+/* 背景层 */
+.visual-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.bg-image {
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+}
+
+.night-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 30, 0.6);
+  pointer-events: none;
+}
+
+/* 受伤闪红 */
+.damage-flash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 0, 0, 0.4);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 100;
+  transition: opacity 0.15s;
+}
+
+.damage-flash.active {
+  opacity: 1;
+}
+
+/* 低理智故障 */
+.glitch-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.glitch-char {
+  position: absolute;
+  color: rgba(255, 0, 0, 0.5);
+  font-weight: bold;
+}
+
+/* 状态栏 */
+.status-bar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 100rpx 30rpx 20rpx;
+}
+
+.status-left {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.day-text {
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.weather-icon {
+  font-size: 36rpx;
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.progress-bar {
+  width: 150rpx;
+  height: 12rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4a90e2, #67b26f);
+  border-radius: 6rpx;
+}
+
+.progress-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 24rpx;
+}
+
+/* 属性条 */
+.stat-bars {
+  position: relative;
+  z-index: 10;
+  padding: 10rpx 30rpx;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.stat-icon {
+  width: 50rpx;
+  font-size: 28rpx;
+}
+
+.stat-bar-bg {
+  flex: 1;
+  height: 16rpx;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin: 0 16rpx;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 8rpx;
+  transition: width 0.3s ease;
+}
+
+.stat-bar-fill.hp {
+  background: linear-gradient(90deg, #ff6b6b, #ee5253);
+}
+
+.stat-bar-fill.hunger {
+  background: linear-gradient(90deg, #feca57, #ff9f43);
+}
+
+.stat-bar-fill.sanity {
+  background: linear-gradient(90deg, #48dbfb, #0abde3);
+}
+
+.stat-value {
+  width: 60rpx;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 24rpx;
+  text-align: right;
+}
+
+/* 背包按钮 */
+.bag-button {
+  position: absolute;
+  top: 100rpx;
+  right: 30rpx;
+  width: 80rpx;
+  height: 80rpx;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.bag-icon {
+  font-size: 36rpx;
+}
+
+.bag-count {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 通知 */
+.notification {
+  position: absolute;
+  top: 200rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 16rpx 32rpx;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 8rpx;
+  z-index: 100;
+  animation: slideDown 0.3s ease;
+}
+
+.notification text {
+  color: #fff;
+  font-size: 26rpx;
+}
+
+.notification.success {
+  background: rgba(46, 204, 113, 0.9);
+}
+
+.notification.negative {
+  background: rgba(231, 76, 60, 0.9);
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateX(-50%) translateY(-20rpx); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* 故事区域 */
+.story-area {
+  flex: 1;
+  position: relative;
+  z-index: 10;
+  padding: 30rpx;
+  min-height: 0;
+}
+
+.story-content {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10rpx);
+  border-radius: 16rpx;
+  padding: 30rpx;
+  min-height: 300rpx;
+}
+
+.story-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 30rpx;
+  line-height: 1.8;
+  letter-spacing: 2rpx;
+}
+
+.story-text.text-distort {
+  text-shadow: 2rpx 0 rgba(255, 0, 0, 0.5), -2rpx 0 rgba(0, 255, 255, 0.5);
+}
+
+.cursor {
+  color: #fff;
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* 选项区域 */
+.action-area {
+  position: relative;
+  z-index: 10;
+  padding: 20rpx 30rpx 60rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.action-area.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.choice-btn {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
+  border-radius: 12rpx;
+  padding: 24rpx 30rpx;
+  transition: all 0.2s;
+}
+
+.choice-btn:active {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0.98);
+}
+
+.btn-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 28rpx;
+}
+
+.btn-text.glitch-text {
+  text-shadow: 2rpx 0 red, -2rpx 0 cyan;
+}
+
+.night-warning {
+  text-align: center;
+  padding: 16rpx;
+}
+
+.night-warning text {
+  color: rgba(255, 200, 100, 0.8);
+  font-size: 24rpx;
+}
+
+/* 背包面板 */
+.inventory-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inventory-panel {
+  width: 90%;
+  max-height: 80%;
+  background: rgba(30, 30, 40, 0.95);
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.panel-title {
+  font-size: 36rpx;
+  color: #fff;
+  font-weight: 600;
+}
+
+.load-info {
+  flex: 1;
+  text-align: center;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.close-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 36rpx;
+}
+
+.inventory-list {
+  flex: 1;
+  padding: 20rpx;
+  min-height: 200rpx;
+  max-height: 400rpx;
+}
+
+.empty-text {
+  text-align: center;
+  padding: 60rpx;
+}
+
+.empty-text text {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 28rpx;
+}
+
+.inventory-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.inventory-item:active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.item-icon {
+  font-size: 40rpx;
+  margin-right: 20rpx;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-name {
+  display: block;
+  color: #fff;
+  font-size: 28rpx;
+  margin-bottom: 4rpx;
+}
+
+.item-desc {
+  display: block;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 22rpx;
+}
+
+.item-weight {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 22rpx;
+}
+
+/* 装备区 */
+.equipment-section {
+  padding: 20rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.section-title {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.equipment-slots {
+  display: flex;
+  justify-content: space-around;
+}
+
+.equip-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12rpx;
+  min-width: 100rpx;
+}
+
+.slot-label {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 8rpx;
+}
+
+.slot-item {
+  font-size: 32rpx;
+}
+
+/* 游戏结束 */
+.gameover-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gameover-panel {
+  width: 80%;
+  background: rgba(20, 20, 30, 0.95);
+  border-radius: 20rpx;
+  padding: 50rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gameover-title {
+  font-size: 48rpx;
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 30rpx;
+}
+
+.gameover-text {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 40rpx;
+}
+
+.gameover-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 40rpx;
+}
+
+.gameover-stats text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 26rpx;
+}
+
+.gameover-actions {
+  display: flex;
+  gap: 30rpx;
+  width: 100%;
+}
+
+.action-btn {
+  flex: 1;
+  height: 90rpx;
+  background: linear-gradient(135deg, #4a90e2, #0056b3);
+  border-radius: 45rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.action-btn text {
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
+}

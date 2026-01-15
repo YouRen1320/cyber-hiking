@@ -1,0 +1,164 @@
+<!--pages/game/game.wxml-->
+<view class="game-container">
+  <!-- 背景层 -->
+  <view class="visual-layer" style="{{visualStyle}}">
+    <image class="bg-image" src="{{bgImage}}" mode="aspectFill"></image>
+    <view wx:if="{{isNight}}" class="night-overlay"></view>
+  </view>
+  
+  <!-- 受伤闪红效果 -->
+  <view class="damage-flash {{showDamageFlash ? 'active' : ''}}"></view>
+  
+  <!-- 低理智故障效果 -->
+  <view wx:if="{{isLowSanity}}" class="glitch-overlay">
+    <text wx:for="{{glitchChars}}" wx:key="index" class="glitch-char" 
+          style="top:{{item.top}}%; left:{{item.left}}%; font-size:{{item.size}}rpx; opacity:{{item.opacity}}; transform:rotate({{item.rotate}}deg);">
+      {{item.char}}
+    </text>
+  </view>
+  
+  <!-- 状态栏 -->
+  <view class="status-bar">
+    <view class="status-left">
+      <text class="day-text">Day {{$game.player.days}}</text>
+      <text class="weather-icon">{{weatherIcon}}</text>
+    </view>
+    <view class="status-right">
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{$game.progress}}%"></view>
+      </view>
+      <text class="progress-text">{{$game.progress}}%</text>
+    </view>
+  </view>
+  
+  <!-- 生命值条 -->
+  <view class="stat-bars">
+    <view class="stat-row">
+      <text class="stat-icon">❤️</text>
+      <view class="stat-bar-bg">
+        <view class="stat-bar-fill hp" style="width: {{$game.status.hp / $game.status.maxHp * 100}}%"></view>
+      </view>
+      <text class="stat-value">{{$game.status.hp}}</text>
+    </view>
+    <view class="stat-row">
+      <text class="stat-icon">🍞</text>
+      <view class="stat-bar-bg">
+        <view class="stat-bar-fill hunger" style="width: {{$game.status.hunger / $game.status.maxHunger * 100}}%"></view>
+      </view>
+      <text class="stat-value">{{$game.status.hunger}}</text>
+    </view>
+    <view class="stat-row">
+      <text class="stat-icon">🧠</text>
+      <view class="stat-bar-bg">
+        <view class="stat-bar-fill sanity" style="width: {{$game.status.sanity / $game.status.maxSanity * 100}}%"></view>
+      </view>
+      <text class="stat-value">{{$game.status.sanity}}</text>
+    </view>
+  </view>
+  
+  <!-- 背包按钮 -->
+  <view class="bag-button" bindtap="toggleInventory">
+    <text class="bag-icon">🎒</text>
+    <text class="bag-count">{{$game.inventory.length}}</text>
+  </view>
+  
+  <!-- 通知提示 -->
+  <view wx:if="{{$game.notification.visible}}" class="notification {{$game.notification.type}}">
+    <text>{{$game.notification.message}}</text>
+  </view>
+  
+  <!-- 故事文本区域 -->
+  <scroll-view scroll-y class="story-area" bindtap="onStoryTap">
+    <view class="story-content">
+      <text class="story-text {{isLowSanity ? 'text-distort' : ''}}">{{displayedText}}</text>
+      <text wx:if="{{isTyping}}" class="cursor">|</text>
+    </view>
+  </scroll-view>
+  
+  <!-- 选项区域 -->
+  <view class="action-area {{isTyping ? 'disabled' : ''}}">
+    <view 
+      wx:for="{{filteredChoices}}" 
+      wx:key="text" 
+      class="choice-btn" 
+      hover-class="btn-hover" 
+      bindtap="onChoiceTap" 
+      data-index="{{index}}">
+      <text class="btn-text {{isLowSanity ? 'glitch-text' : ''}}">{{item.displayText}}</text>
+    </view>
+    <view wx:if="{{isNight && !hasVision}}" class="night-warning">
+      <text>⚠️ 天黑路滑，视野受限 (高风险)</text>
+    </view>
+  </view>
+  
+  <!-- 背包面板 -->
+  <view wx:if="{{showInventory}}" class="inventory-overlay" bindtap="toggleInventory">
+    <view class="inventory-panel" catchtap="preventClose">
+      <view class="panel-header">
+        <text class="panel-title">背包</text>
+        <text class="load-info">负重: {{currentLoad}} / {{$game.status.maxLoad}} kg</text>
+        <view class="close-btn" bindtap="toggleInventory">✕</view>
+      </view>
+      <scroll-view scroll-y class="inventory-list">
+        <view wx:if="{{$game.inventory.length === 0}}" class="empty-text">
+          <text>背包空空如也...</text>
+        </view>
+        <view 
+          wx:for="{{$game.inventory}}" 
+          wx:key="id" 
+          class="inventory-item"
+          bindtap="onUseItem"
+          data-index="{{index}}">
+          <text class="item-icon">{{item.icon}}</text>
+          <view class="item-info">
+            <text class="item-name">{{item.name}}</text>
+            <text class="item-desc">{{item.description}}</text>
+          </view>
+          <text class="item-weight">{{item.weight}}kg</text>
+        </view>
+      </scroll-view>
+      <!-- 装备槽位 -->
+      <view class="equipment-section">
+        <text class="section-title">装备</text>
+        <view class="equipment-slots">
+          <view class="equip-slot" bindtap="onUnequip" data-slot="head">
+            <text class="slot-label">头部</text>
+            <text class="slot-item">{{$game.equipment.head ? $game.equipment.head.icon : '空'}}</text>
+          </view>
+          <view class="equip-slot" bindtap="onUnequip" data-slot="body">
+            <text class="slot-label">身体</text>
+            <text class="slot-item">{{$game.equipment.body ? $game.equipment.body.icon : '空'}}</text>
+          </view>
+          <view class="equip-slot" bindtap="onUnequip" data-slot="feet">
+            <text class="slot-label">脚部</text>
+            <text class="slot-item">{{$game.equipment.feet ? $game.equipment.feet.icon : '空'}}</text>
+          </view>
+          <view class="equip-slot" bindtap="onUnequip" data-slot="hand">
+            <text class="slot-label">手持</text>
+            <text class="slot-item">{{$game.equipment.hand ? $game.equipment.hand.icon : '空'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 游戏结束面板 -->
+  <view wx:if="{{$game.gameState === 'ended'}}" class="gameover-overlay">
+    <view class="gameover-panel">
+      <text class="gameover-title">旅途结束</text>
+      <text class="gameover-text">{{currentScene.text}}</text>
+      <view class="gameover-stats">
+        <text>存活天数: {{$game.player.days}}</text>
+        <text>探索进度: {{$game.progress}}%</text>
+      </view>
+      <view class="gameover-actions">
+        <view class="action-btn" bindtap="onRestart">
+          <text>重新开始</text>
+        </view>
+        <view class="action-btn secondary" bindtap="onBackHome">
+          <text>返回首页</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
