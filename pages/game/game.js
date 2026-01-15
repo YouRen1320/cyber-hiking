@@ -10,7 +10,10 @@ const {
 } = require("../../lib/core/game.js");
 const { metaStore } = require("../../lib/core/meta.js");
 const { weatherData } = require("../../lib/model/weather.js");
-const { getBgImage } = require("../../lib/utils/backgrounds.js");
+const {
+  getBgImage,
+  STATIC_BASE_URL,
+} = require("../../lib/utils/backgrounds.js");
 
 Page({
   data: {
@@ -24,7 +27,7 @@ Page({
     isNight: false,
     hasVision: true,
     weatherIcon: "☀",
-    bgImage: "/assets/back_ground.png",
+    bgImage: `${STATIC_BASE_URL}/back_ground.png`,
     visualStyle: "",
     filteredChoices: [],
     currentLoad: 0,
