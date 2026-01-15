@@ -1,5 +1,4 @@
 {
-  "navigationBarTitleText": "勇闯鳌太",
-  "navigationStyle": "custom",
+  "disableScroll": true,
   "usingComponents": {}
 }

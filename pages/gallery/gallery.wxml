@@ -1,7 +1,7 @@
 <view class="container">
   <!-- 背景层 -->
   <view class="visual-layer">
-    <image class="bg-image" src="/static_pkg10/assets/back_ground.png" mode="aspectFill"></image>
+    <image class="bg-image" src="/assets/back_ground.png" mode="aspectFill"></image>
     <view class="overlay"></view>
   </view>
 

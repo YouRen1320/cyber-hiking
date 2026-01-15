@@ -1,5 +1,4 @@
 {
-  "navigationBarTitleText": "冒险日志",
-  "navigationStyle": "custom",
+  "disableScroll": true,
   "usingComponents": {}
 }

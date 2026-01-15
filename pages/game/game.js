@@ -24,7 +24,7 @@ Page({
     isNight: false,
     hasVision: true,
     weatherIcon: "☀",
-    bgImage: "/static_pkg10/assets/back_ground.png",
+    bgImage: "/assets/back_ground.png",
     visualStyle: "",
     filteredChoices: [],
     currentLoad: 0,

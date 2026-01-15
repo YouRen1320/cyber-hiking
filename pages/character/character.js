@@ -58,12 +58,14 @@ Page({
     ];
 
     pkgs.forEach((name) => {
-      wx.loadSubpackage({
-        name: name,
-        fail: (res) => {
-          console.warn(`Preload ${name} failed:`, res);
-        }, // 静默加载，不阻塞用户
-      });
+      if (wx.loadSubpackage) {
+        wx.loadSubpackage({
+          name: name,
+          fail: (res) => {
+            console.warn(`Preload ${name} failed:`, res);
+          }, // 静默加载，不阻塞用户
+        });
+      }
     });
   },
 
