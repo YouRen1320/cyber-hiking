@@ -17,6 +17,7 @@ Page({
     isCurrentLocked: false,
     loadingProgress: 0,
     loadingText: "正在前往登山口...",
+    showGuide: false,
   },
 
   onLoad() {
@@ -38,38 +39,6 @@ Page({
     });
 
     this.updateLockedStatus();
-
-    // 静默预加载分包
-    this.preloadSubpackages();
-  },
-
-  /**
-   * 预加载分包
-   */
-  preloadSubpackages() {
-    const pkgs = [
-      "pkg1",
-      "pkg2",
-      "pkg3",
-      "pkg4",
-      "pkg5",
-      "pkg6",
-      "pkg7",
-      "pkg8",
-      "pkg9",
-      "pkg10",
-    ];
-
-    pkgs.forEach((name) => {
-      if (wx.loadSubpackage) {
-        wx.loadSubpackage({
-          name: name,
-          fail: (res) => {
-            console.warn(`Preload ${name} failed:`, res);
-          }, // 静默加载，不阻塞用户
-        });
-      }
-    });
   },
 
   onShow() {
@@ -126,13 +95,14 @@ Page({
   },
 
   /**
-   * 确认选择
+   * 显示玩法指南
    */
-  onConfirmSelection() {
+  onShowGuide() {
     if (this.data.isTransitioning) return;
 
     const currentRole = this.data.roleList[this.data.currentIndex];
 
+    // 检查角色是否锁定
     if (currentRole.isLocked) {
       wx.showToast({
         title: "该角色尚未解锁",
@@ -140,6 +110,22 @@ Page({
       });
       return;
     }
+
+    // 显示指南弹窗
+    this.setData({ showGuide: true });
+  },
+
+  /**
+   * 开始游戏 (确认指南后)
+   */
+  onStartGame() {
+    // 关闭弹窗
+    this.setData({ showGuide: false });
+
+    // 再次检查防止重复点击
+    if (this.data.isTransitioning) return;
+
+    const currentRole = this.data.roleList[this.data.currentIndex];
 
     try {
       // 初始化游戏
@@ -172,7 +158,7 @@ Page({
         }, 300);
       });
     } catch (err) {
-      console.error("Error in confirmSelection:", err);
+      console.error("Error in onStartGame:", err);
       this.setData({ isTransitioning: false });
     }
   },

@@ -79,10 +79,50 @@
   
   <!-- 底部按钮 -->
   <view class="footer">
-    <button class="btn-start" bindtap="onConfirmSelection" disabled="{{isCurrentLocked}}">
+    <button class="btn-start" bindtap="onShowGuide" disabled="{{isCurrentLocked}}">
       <text wx:if="{{!isCurrentLocked}}" class="btn-text">踏入荒野</text>
       <text wx:else class="btn-text">无法选择</text>
     </button>
+  </view>
+
+  <!-- 玩法说明弹窗 -->
+  <view wx:if="{{showGuide}}" class="guide-modal">
+    <view class="guide-card">
+      <text class="guide-title">生存指南</text>
+      
+      <view class="guide-section">
+        <text class="section-label">生命体征</text>
+        <view class="status-row">
+          <text class="icon">❤️</text>
+          <view class="status-desc">
+            <text class="status-name">体能 (HP)</text>
+            <text class="status-detail">归零即死亡。恶劣天气、受伤会扣除。</text>
+          </view>
+        </view>
+        <view class="status-row">
+          <text class="icon">🍞</text>
+          <view class="status-desc">
+            <text class="status-name">饱食度</text>
+            <text class="status-detail">行动会消耗。耗尽后每回合扣除体能。</text>
+          </view>
+        </view>
+        <view class="status-row">
+          <text class="icon">🧠</text>
+          <view class="status-desc">
+            <text class="status-name">理智 (SAN)</text>
+            <text class="status-detail">通过恐怖地带扣除。过低会产生幻觉。</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="guide-section">
+        <text class="section-label">玩法说明</text>
+        <text class="guide-text">这是一次文字冒险。你的选择决定生死。</text>
+        <text class="guide-text">合理分配物资，注意天气变化，活下去。</text>
+      </view>
+
+      <button class="btn-confirm" bindtap="onStartGame">出发</button>
+    </view>
   </view>
   
   <!-- 过渡动画 -->
