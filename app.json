@@ -6,6 +6,75 @@
     "pages/gallery/gallery",
     "pages/journal/journal"
   ],
+  "subpackages": [
+    {
+      "root": "static_pkg1",
+      "name": "pkg1",
+      "pages": ["index/index"]
+    },
+    {
+      "root": "static_pkg2",
+      "name": "pkg2",
+      "pages": ["index/index"]
+    },
+    {
+      "root": "static_pkg3",
+      "name": "pkg3",
+      "pages": ["index/index"]
+    },
+    {
+      "root": "static_pkg4",
+      "name": "pkg4",
+      "pages": ["index/index"]
+    },
+    {
+      "root": "static_pkg5",
+      "name": "pkg5",
+      "pages": ["index/index"]
+    },
+    {
+      "root": "static_pkg6",
+      "name": "pkg6",
+      "pages": ["index/index"]
+    },
+    {
+      "root": "static_pkg7",
+      "name": "pkg7",
+      "pages": ["index/index"]
+    },
+    {
+      "root": "static_pkg8",
+      "name": "pkg8",
+      "pages": ["index/index"]
+    },
+    {
+      "root": "static_pkg9",
+      "name": "pkg9",
+      "pages": ["index/index"]
+    },
+    {
+      "root": "static_pkg10",
+      "name": "pkg10",
+      "pages": ["index/index"]
+    }
+  ],
+  "preloadRule": {
+    "pages/character/character": {
+      "network": "all",
+      "packages": [
+        "pkg1",
+        "pkg2",
+        "pkg3",
+        "pkg4",
+        "pkg5",
+        "pkg6",
+        "pkg7",
+        "pkg8",
+        "pkg9",
+        "pkg10"
+      ]
+    }
+  },
   "window": {
     "navigationBarTextStyle": "white",
     "navigationBarBackgroundColor": "#1a1a1a",
