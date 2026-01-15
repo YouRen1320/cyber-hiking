@@ -1,266 +1,323 @@
-/* 全屏布局 */
-page {
-  height: 100vh;
-  background: #0a0a0a;
-}
-
+/* pages/gallery/gallery.wxss */
 .container {
-  width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  position: relative;
+  overflow: hidden;
+  background: #000;
+  padding: 0;
   box-sizing: border-box;
+  color: #fff;
+  background-size: cover;
+  background-position: center;
 }
 
-/* === 背景层 === */
-.visual-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
-
-.bg-image {
-  width: 100%;
-  height: 100%;
-  opacity: 0.4;
-  filter: blur(8px) saturate(0.8);
-  /* 模糊处理，突出前景 */
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    180deg,
-    rgba(10, 10, 15, 0.85),
-    rgba(10, 10, 15, 0.95)
-  );
-}
-
-/* === 头部区 === */
 .header {
-  position: relative;
-  z-index: 10;
-  flex-shrink: 0;
-  padding: 100rpx 40rpx 40rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-bottom: 60rpx;
+  text-align: center;
 }
 
 .title {
-  font-size: 56rpx;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: 8rpx;
-  margin-bottom: 24rpx;
-  text-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.5);
-  background: linear-gradient(45deg, #fff, #a0a0a0);
-  -webkit-background-clip: text;
-  color: transparent;
-  /* 渐变文字 */
-}
-
-.subtitle-badge {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 8rpx 24rpx;
-  border-radius: 30rpx;
-  backdrop-filter: blur(10px);
-}
-
-.count-label {
-  font-size: 24rpx;
-  color: rgba(255, 255, 255, 0.6);
-  margin-right: 12rpx;
-}
-
-.count-value {
-  font-size: 26rpx;
-  color: #fff;
-  font-weight: 700;
-  font-family: monospace;
-}
-
-/* === 卡片列表区 === */
-.endings-list {
-  position: relative;
-  z-index: 10;
-  flex: 1;
-  height: 0;
-  padding: 0 32rpx;
-  box-sizing: border-box;
-}
-
-.ending-card {
-  position: relative;
-  display: flex;
-  background: rgba(30, 30, 35, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20rpx;
-  padding: 32rpx;
-  margin-bottom: 28rpx;
-  backdrop-filter: blur(12px);
-  transition: transform 0.2s, background 0.2s;
-}
-
-.ending-card:active {
-  transform: scale(0.98);
-}
-
-.ending-card.locked {
-  background: rgba(20, 20, 25, 0.4);
-  border-color: rgba(255, 255, 255, 0.03);
-}
-
-.ending-card.unlocked {
-  background: linear-gradient(
-    135deg,
-    rgba(40, 45, 60, 0.7),
-    rgba(30, 35, 45, 0.7)
-  );
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.2);
-}
-
-/* 左侧图标 */
-.card-icon-wrapper {
-  width: 100rpx;
-  height: 100rpx;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 20rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 32rpx;
-  flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.unlocked .card-icon-wrapper {
-  background: radial-gradient(
-    circle at center,
-    rgba(52, 152, 219, 0.2),
-    rgba(0, 0, 0, 0.3)
-  );
-  border-color: rgba(52, 152, 219, 0.3);
-}
-
-.card-icon {
+  display: block;
   font-size: 48rpx;
+  font-weight: bold;
+  letter-spacing: 4rpx;
+  margin-bottom: 10rpx;
 }
 
-/* 内容区 */
-.card-content {
-  flex: 1;
+.subtitle {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+  letter-spacing: 8rpx;
+  margin-bottom: 20rpx;
+}
+
+.desc {
+  font-size: 24rpx;
+  color: #888;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3列 */
+  gap: 30rpx;
+}
+
+.grid-item {
+  background: #111;
+  border-radius: 12rpx;
+  padding: 30rpx 10rpx;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12rpx;
-}
-
-.card-name {
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #e0e0e0;
-  letter-spacing: 1px;
-}
-
-.locked .card-name {
-  color: #666;
-  font-family: monospace;
-}
-
-.unlock-tag {
-  font-size: 20rpx;
-  background: rgba(46, 204, 113, 0.2);
-  color: #2ecc71;
-  padding: 4rpx 12rpx;
-  border-radius: 8rpx;
-  border: 1px solid rgba(46, 204, 113, 0.3);
-  font-weight: 600;
-}
-
-.card-desc {
-  font-size: 24rpx;
-  color: rgba(255, 255, 255, 0.6);
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-.locked .card-desc {
-  color: rgba(255, 255, 255, 0.2);
-  font-style: italic;
-}
-
-/* 装饰元素 */
-.card-deco {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-top: 60rpx solid rgba(255, 255, 255, 0.03);
-  border-left: 60rpx solid transparent;
-}
-
-.unlocked .card-deco {
-  border-top-color: rgba(52, 152, 219, 0.2);
-}
-
-/* === 底部按钮区 === */
-.footer-action {
-  position: relative;
-  z-index: 10;
-  flex-shrink: 0;
-  padding: 20rpx 0 60rpx;
-  display: flex;
-  justify-content: center;
-  background: linear-gradient(0deg, rgba(10, 10, 15, 0.95), transparent);
-}
-
-.back-btn {
-  display: flex;
   align-items: center;
   justify-content: center;
-  width: 280rpx;
-  height: 88rpx;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 44rpx;
+  border: 1px solid #222;
   transition: all 0.2s;
 }
 
-.back-btn:active {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(0.96);
+/* Navigation Header */
+.nav-header {
+  position: relative;
+  width: 100%;
+  height: 88px; /* Includes status bar area */
+  padding-top: 44px; /* Space for status bar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+  z-index: 10;
+  flex-shrink: 0;
 }
 
-.back-btn text {
-  color: #fff;
-  font-size: 28rpx;
-  font-weight: 500;
-  letter-spacing: 2rpx;
+.back-btn {
+  position: absolute;
+  left: 20rpx;
+  bottom: 0;
+  width: 88rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
 }
 
 .back-icon {
+  width: 24rpx;
+  height: 24rpx;
+  border-left: 4rpx solid rgba(255, 255, 255, 0.9);
+  border-bottom: 4rpx solid rgba(255, 255, 255, 0.9);
+  transform: rotate(45deg);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 32rpx;
+  padding: 4rpx;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab {
+  padding: 12rpx 32rpx;
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.6);
+  border-radius: 28rpx;
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  font-weight: bold;
+}
+
+/* Content Area */
+.gallery-content {
+  flex: 1;
+  height: 0; /* Crucial for scroll-view in flex */
+  width: 100%;
+  box-sizing: border-box;
+  padding-bottom: 40rpx;
+}
+
+.header {
+  padding: 20rpx 40rpx;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 2rpx;
+}
+
+/* Grid Layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+  padding: 20rpx 30rpx;
+}
+
+/* Item Card */
+.item-card {
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.item-card.unlocked {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.item-icon {
+  font-size: 48rpx;
+  margin-bottom: 12rpx;
+  opacity: 0.5;
+}
+
+.item-card.unlocked .item-icon {
+  opacity: 1;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.item-name {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.item-card.unlocked .item-name {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Ending Card */
+.ending-card {
+  grid-column: span 3; /* Full width */
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16rpx;
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx; /* Actually handled by grid gap, but good for safety */
+  position: relative;
+  overflow: hidden;
+}
+
+.ending-card.locked {
+  opacity: 0.6;
+}
+
+.ending-content {
+  flex: 1;
+}
+
+.ending-name {
   font-size: 32rpx;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8rpx;
+}
+
+.ending-desc {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.4;
+}
+
+.status-badge {
+  font-size: 20rpx;
+  color: #000;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  font-weight: bold;
+  margin-left: 20rpx;
+}
+
+/* Modal Styles */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.modal-mask.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  width: 600rpx;
+  background: rgba(20, 20, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24rpx;
+  padding: 0;
+  overflow: hidden;
+  transform: scale(0.9);
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.5);
+}
+
+.modal-mask.show .modal-content {
+  transform: scale(1);
+}
+
+.modal-header {
+  padding: 40rpx 0;
+  text-align: center;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.modal-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: 2rpx;
+}
+
+.modal-body {
+  padding: 40rpx;
+  min-height: 200rpx;
+  max-height: 50vh;
+  overflow-y: auto;
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: pre-wrap;
+  text-align: justify;
+}
+
+.modal-footer {
+  padding: 30rpx;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: center;
+}
+
+.close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 28rpx;
+  padding: 16rpx 60rpx;
+  border-radius: 100rpx;
+  transition: all 0.2s ease;
+}
+
+.close-btn:active {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0.95);
 }

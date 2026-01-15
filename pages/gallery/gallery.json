@@ -1,4 +1,6 @@
 {
-  "disableScroll": true,
-  "usingComponents": {}
+  "navigationBarTitleText": "荒野拾遗",
+  "navigationBarBackgroundColor": "#000000",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#000000"
 }

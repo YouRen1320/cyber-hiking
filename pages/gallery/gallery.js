@@ -1,72 +1,122 @@
-// pages/gallery/gallery.js
-const {
-  metaStore,
-  loadMeta,
-  isEndingUnlocked,
-} = require("../../lib/core/meta.js");
-
-// 结局定义
-const endingDefs = [
-  { id: "end_success", name: "小鳌太完成", icon: "⛰️", desc: "安全走出无人区" },
-  {
-    id: "end_game_cleared",
-    name: "大鳌太完成",
-    icon: "🏆",
-    desc: "完成全程穿越",
-  },
-  {
-    id: "end_retreat",
-    name: "明智下撤",
-    icon: "🔙",
-    desc: "保住性命，来日方长",
-  },
-  { id: "end_rescue", name: "获救", icon: "🚁", desc: "等待救援成功" },
-  { id: "end_caught", name: "被捕", icon: "👮", desc: "被巡山队抓获" },
-  { id: "end_lost_23km", name: "失踪", icon: "❓", desc: "迷失在23公里跑道" },
-  { id: "end_hidden", name: "轮回", icon: "⌚", desc: "时间的秘密" },
-  { id: "dead_001", name: "长眠大山", icon: "💀", desc: "成为大山的一部分" },
-  { id: "dead_starve", name: "饥饿", icon: "🍽️", desc: "饥寒交迫" },
-  { id: "dead_cold", name: "失温", icon: "❄️", desc: "温暖地睡去" },
-  { id: "dead_sanity", name: "崩溃", icon: "🧠", desc: "理智归零" },
-];
+const { metaStore, loadMeta } = require("../../lib/core/meta.js");
+const { easterEggs } = require("../../lib/model/easter_eggs.js");
+const { endings } = require("../../lib/model/endings");
+const { STATIC_BASE_URL } = require("../../lib/utils/backgrounds");
 
 Page({
   data: {
+    bgImage: "",
+    eggs: [],
     endings: [],
     unlockedCount: 0,
-    totalCount: 0,
+    unlockedEndingsCount: 0,
+    selectedEgg: null,
+    showModal: false,
+    currentTab: "items", // 'items' or 'endings'
   },
 
   onLoad() {
-    loadMeta();
-    metaStore.bind(this, "$meta");
-    this.loadEndings();
+    this.setData({
+      bgImage: `${STATIC_BASE_URL}/assets/images/bg_gallery.jpg`,
+    });
   },
 
   onShow() {
-    this.loadEndings();
+    loadMeta(); // 确保最新数据
+    this.initEggs();
+    this.initEndings();
   },
 
-  onUnload() {
-    metaStore.unbind(this);
-  },
-
-  loadEndings() {
-    const endings = endingDefs.map((def) => ({
-      ...def,
-      unlocked: isEndingUnlocked(def.id),
+  initEggs() {
+    const unlocked = metaStore.data.unlockedEggs || [];
+    const eggsList = Object.values(easterEggs).map((egg) => ({
+      ...egg,
+      unlocked: unlocked.includes(egg.id),
     }));
 
-    const unlockedCount = endings.filter((e) => e.unlocked).length;
+    this.setData({
+      eggs: eggsList,
+      unlockedCount: unlocked.length,
+    });
+  },
+
+  initEndings() {
+    // Ideally this should come from metaStore, e.g. metaStore.data.unlockedEndings
+    // If not yet implemented in meta.js, we might need to add it or infer it.
+    // Assuming metaStore has an array of unlocked ending IDs.
+    // For now, let's assume it exists or default to empty if not.
+    const unlocked = metaStore.data.unlockedEndings || [];
+
+    const endingsList = Object.values(endings).map((ending) => ({
+      ...ending,
+      unlocked: unlocked.includes(ending.id),
+    }));
 
     this.setData({
-      endings,
-      unlockedCount,
-      totalCount: endings.length,
+      endings: endingsList,
+      unlockedEndingsCount: unlocked.length,
+    });
+  },
+
+  switchTab(e) {
+    const tab = e.currentTarget.dataset.tab;
+    this.setData({
+      currentTab: tab,
     });
   },
 
   onBack() {
-    wx.navigateBack();
+    wx.navigateBack({
+      fail: () => {
+        wx.reLaunch({
+          url: "/pages/index/index",
+        });
+      },
+    });
   },
+
+  onItemTap(e) {
+    const id = e.currentTarget.dataset.id;
+    const egg = this.data.eggs.find((i) => i.id === id);
+
+    if (egg && egg.unlocked) {
+      this.setData({
+        selectedEgg: egg,
+        showModal: true,
+      });
+    } else {
+      wx.showToast({
+        title: "尚未发现此物品",
+        icon: "none",
+      });
+    }
+  },
+
+  onEndingTap(e) {
+    const id = e.currentTarget.dataset.id;
+    const ending = this.data.endings.find((i) => i.id === id);
+
+    if (ending && ending.unlocked) {
+      // For endings, we might not need a modal if the card shows enough info,
+      // or we can reuse the modal to show the full description if it's long.
+      // For now, let's just let the card display the info.
+      // If we *do* want a modal, we can set selectedEgg (reused as selectedItem)
+      // but the WXML modal expects an icon/story structure.
+      // Let's keep it simple: clicking an unlocked ending does nothing or maybe a small visual feedback.
+    } else {
+      wx.showToast({
+        title: "尚未达成此结局",
+        icon: "none",
+      });
+    }
+  },
+
+  closeModal() {
+    this.setData({
+      selectedEgg: null,
+      showModal: false,
+    });
+  },
+
+  stopProp() {}, // 防止点击内容关闭弹窗
 });

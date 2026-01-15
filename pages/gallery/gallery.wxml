@@ -1,46 +1,68 @@
-<view class="container">
-  <!-- 背景层 -->
-  <view class="visual-layer">
-    <image class="bg-image" src="/assets/back_ground.png" mode="aspectFill"></image>
-    <view class="overlay"></view>
-  </view>
-
-  <view class="header">
-    <text class="title">结局档案</text>
-    <view class="subtitle-badge">
-      <text class="count-label">解锁进度</text>
-      <text class="count-value">{{unlockedCount}} / {{totalCount}}</text>
+<view class="container" style="background-image: url('{{bgImage}}')">
+  <view class="glass-overlay"></view>
+  
+  <view class="nav-header">
+    <view class="back-btn" bindtap="onBack">
+      <view class="back-icon"></view>
+    </view>
+    <view class="tabs">
+      <view class="tab {{currentTab === 'items' ? 'active' : ''}}" bindtap="switchTab" data-tab="items">荒野拾遗</view>
+      <view class="tab {{currentTab === 'endings' ? 'active' : ''}}" bindtap="switchTab" data-tab="endings">结局图鉴</view>
     </view>
   </view>
 
-  <scroll-view scroll-y class="endings-list" enable-flex>
-    <view wx:for="{{endings}}" wx:key="id" class="ending-card {{item.unlocked ? 'unlocked' : 'locked'}}">
+  <!-- Items Grid -->
+  <scroll-view scroll-y class="gallery-content" wx:if="{{currentTab === 'items'}}">
+    <view class="header">
+      <text class="subtitle">散落在鳌太线上的记忆碎片 {{unlockedCount}}/10</text>
+    </view>
 
-      <!-- 状态图标 -->
-      <view class="card-icon-wrapper">
-        <text class="card-icon">{{item.unlocked ? item.icon : '🔒'}}</text>
-      </view>
-
-      <!-- 内容信息 -->
-      <view class="card-content">
-        <view class="card-header">
-          <text class="card-name">{{item.unlocked ? item.name : '未知结局'}}</text>
-          <view wx:if="{{item.unlocked}}" class="unlock-tag">已达成</view>
+    <view class="grid">
+      <block wx:for="{{eggs}}" wx:key="id">
+        <view class="item-card {{item.unlocked ? 'unlocked' : 'locked'}}" 
+              bindtap="onItemTap" 
+              data-id="{{item.id}}">
+          <view class="item-icon">{{item.unlocked ? item.icon : '?'}}</view>
+          <view class="item-name">{{item.unlocked ? item.name : '未知物品'}}</view>
         </view>
-        <text class="card-desc">{{item.unlocked ? item.desc : '探索更多可能性以解锁此档案...'}}</text>
-      </view>
-
-      <!-- 装饰线 -->
-      <view class="card-deco"></view>
+      </block>
     </view>
-
-    <!-- 底部占位，防止最后一张卡片贴底 -->
-    <view style="height: 40rpx;"></view>
   </scroll-view>
 
-  <view class="footer-action">
-    <view class="back-btn" bindtap="onBack">
-      <text>返回营地</text>
+  <!-- Endings Grid -->
+  <scroll-view scroll-y class="gallery-content" wx:if="{{currentTab === 'endings'}}">
+    <view class="header">
+      <text class="subtitle">这一路走来的不同结局 {{unlockedEndingsCount}}/10</text>
+    </view>
+
+    <view class="grid">
+      <block wx:for="{{endings}}" wx:key="id">
+        <view class="ending-card {{item.unlocked ? 'unlocked' : 'locked'}}" 
+              bindtap="onEndingTap"
+              data-id="{{item.id}}">
+           <view class="ending-content">
+             <view class="ending-name">{{item.unlocked ? item.name : '???'}}</view>
+             <view class="ending-desc">{{item.unlocked ? item.desc : '未达成此结局'}}</view>
+           </view>
+           <view class="status-badge" wx:if="{{item.unlocked}}">已达成</view>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <!-- Item Detail Modal -->
+  <view class="modal-mask {{showModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="stopProp">
+      <view class="modal-header">
+        <view class="modal-icon">{{selectedEgg.icon}}</view>
+        <view class="modal-title">{{selectedEgg.name}}</view>
+      </view>
+      <view class="modal-body">
+        <text>{{selectedEgg.story}}</text>
+      </view>
+      <view class="modal-footer">
+        <view class="close-btn" bindtap="closeModal">关闭</view>
+      </view>
     </view>
   </view>
 </view>
