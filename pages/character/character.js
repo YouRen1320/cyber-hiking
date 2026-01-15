@@ -7,6 +7,7 @@ const {
 } = require("../../lib/core/meta.js");
 const { roles } = require("../../lib/model/roles.js");
 const { items } = require("../../lib/model/items.js");
+const { preloadCoreImages } = require("../../lib/utils/backgrounds.js");
 
 Page({
   data: {
@@ -14,6 +15,8 @@ Page({
     currentIndex: 0,
     isTransitioning: false,
     isCurrentLocked: false,
+    loadingProgress: 0,
+    loadingText: "正在前往登山口...",
   },
 
   onLoad() {
@@ -142,18 +145,32 @@ Page({
       // 初始化游戏
       initGame(currentRole.id);
 
-      this.setData({ isTransitioning: true });
+      this.setData({
+        isTransitioning: true,
+        loadingProgress: 0,
+        loadingText: "正在前往登山口...",
+      });
 
-      // 延迟跳转
-      setTimeout(() => {
-        wx.navigateTo({
-          url: "/pages/game/game",
-          fail: (err) => {
-            console.error("Navigation failed:", err);
-            this.setData({ isTransitioning: false });
-          },
+      // 预加载核心图片
+      preloadCoreImages((loaded, total) => {
+        const progress = Math.floor((loaded / total) * 100);
+        this.setData({
+          loadingProgress: progress,
+          loadingText: "加载资源中...",
         });
-      }, 1500);
+      }).then(() => {
+        // 加载完成，跳转到游戏页面
+        this.setData({ loadingText: "准备就绪!" });
+        setTimeout(() => {
+          wx.navigateTo({
+            url: "/pages/game/game",
+            fail: (err) => {
+              console.error("Navigation failed:", err);
+              this.setData({ isTransitioning: false });
+            },
+          });
+        }, 300);
+      });
     } catch (err) {
       console.error("Error in confirmSelection:", err);
       this.setData({ isTransitioning: false });

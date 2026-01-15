@@ -1,4 +1,5 @@
 <view class="game-container">
+  <wxs src="./utils.wxs" module="utils" />
   <!-- 背景层 -->
   <view class="visual-layer" style="{{visualStyle}}">
     <image class="bg-image" src="{{bgImage}}" mode="aspectFill"></image>
@@ -38,21 +39,21 @@
         <view class="stat-track">
           <view class="stat-fill hp" style="width: {{$game.status.hp / $game.status.maxHp * 100}}%"></view>
         </view>
-        <text class="stat-value">{{$game.status.hp}}</text>
+        <text class="stat-value">{{utils.round($game.status.hp, 0)}}</text>
       </view>
       <view class="stat-row">
         <text class="stat-emoji">🍞</text>
         <view class="stat-track">
           <view class="stat-fill hunger" style="width: {{$game.status.hunger / $game.status.maxHunger * 100}}%"></view>
         </view>
-        <text class="stat-value">{{$game.status.hunger}}</text>
+        <text class="stat-value">{{utils.round($game.status.hunger, 1)}}</text>
       </view>
       <view class="stat-row">
         <text class="stat-emoji">🧠</text>
         <view class="stat-track">
           <view class="stat-fill sanity" style="width: {{$game.status.sanity / $game.status.maxSanity * 100}}%"></view>
         </view>
-        <text class="stat-value">{{$game.status.sanity}}</text>
+        <text class="stat-value">{{utils.round($game.status.sanity, 0)}}</text>
       </view>
     </view>
   </view>

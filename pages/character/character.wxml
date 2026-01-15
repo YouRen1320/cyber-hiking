@@ -87,6 +87,10 @@
   
   <!-- 过渡动画 -->
   <view wx:if="{{isTransitioning}}" class="transition-overlay">
-    <text class="transition-text">正在前往登山口...</text>
+    <text class="transition-text">{{loadingText}}</text>
+    <view class="loading-bar-container">
+      <view class="loading-bar-fill" style="width: {{loadingProgress}}%"></view>
+    </view>
+    <text class="loading-percent">{{loadingProgress}}%</text>
   </view>
 </view>

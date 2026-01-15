@@ -1,0 +1,13 @@
+// 数字格式化工具
+module.exports = {
+  // 格式化数字，保留指定小数位，默认保留1位
+  round: function (value, decimals) {
+    decimals = decimals || 1;
+    var multiplier = Math.pow(10, decimals);
+    return Math.round(value * multiplier) / multiplier;
+  },
+  // 格式化为整数
+  floor: function (value) {
+    return Math.floor(value);
+  },
+};
