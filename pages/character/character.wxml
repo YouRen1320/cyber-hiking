@@ -17,8 +17,8 @@
     class="role-swiper" 
     current="{{currentIndex}}" 
     bindchange="onSwiperChange"
-    previous-margin="50rpx" 
-    next-margin="50rpx">
+    previous-margin="0" 
+    next-margin="0">
     <swiper-item wx:for="{{roleList}}" wx:key="id" class="swiper-item">
       <view class="role-card {{index === currentIndex ? 'active' : ''}}">
         <!-- 角色头部 -->

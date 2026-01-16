@@ -38,12 +38,9 @@ Page({
     // 处理角色列表
     this.processRoles();
 
-    // 找到第一个可选角色
-    const firstUnlockedIndex = roles.findIndex(
-      (role) => !role.locked || isRoleUnlocked(role.id)
-    );
+    // 默认选中第一个（也是唯一一个）
     this.setData({
-      currentIndex: firstUnlockedIndex >= 0 ? firstUnlockedIndex : 0,
+      currentIndex: 0,
     });
 
     this.updateLockedStatus();
@@ -63,21 +60,26 @@ Page({
    * 处理角色列表
    */
   processRoles() {
-    const roleList = roles.map((role) => {
-      // 获取物品名称
-      const itemNames = role.items.map((itemId) => {
-        return items[itemId] ? items[itemId].name : "未知物品";
-      });
+    // 过滤出已解锁的角色
+    const unlockedRoles = roles.filter(
+      (role) => !role.locked || isRoleUnlocked(role.id)
+    );
 
-      // 检查是否锁定
-      const isLocked = role.locked && !isRoleUnlocked(role.id);
+    // 随机选择一个
+    const selectedRole =
+      unlockedRoles.length > 0
+        ? unlockedRoles[Math.floor(Math.random() * unlockedRoles.length)]
+        : roles[0]; // Fallback
 
-      return {
-        ...role,
-        itemNames,
-        isLocked,
-      };
-    });
+    const roleList = [
+      {
+        ...selectedRole,
+        itemNames: selectedRole.items.map((itemId) =>
+          items[itemId] ? items[itemId].name : "未知物品"
+        ),
+        isLocked: false, // 既然是随机选出的已解锁角色，肯定未锁定
+      },
+    ];
 
     this.setData({ roleList });
   },
@@ -85,8 +87,9 @@ Page({
   /**
    * 更新当前角色锁定状态
    */
-  updateLockedStatus() {
-    const currentRole = this.data.roleList[this.data.currentIndex];
+  updateLockedStatus(index) {
+    const idx = index !== undefined ? index : this.data.currentIndex;
+    const currentRole = this.data.roleList[idx];
     this.setData({
       isCurrentLocked: currentRole ? currentRole.isLocked : false,
     });
@@ -99,7 +102,7 @@ Page({
     this.setData({
       currentIndex: e.detail.current,
     });
-    this.updateLockedStatus();
+    this.updateLockedStatus(e.detail.current);
   },
 
   /**
