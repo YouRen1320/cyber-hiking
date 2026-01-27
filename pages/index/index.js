@@ -10,7 +10,9 @@ Page({
     hasSave: false,
     showRestartModal: false,
     isMusicOn: false,
-    showAboutModal: false,
+    showInfoModal: false,
+    modalTitle: "",
+    modalContent: "",
     $game: null,
     bgImage: "",
   },
@@ -126,14 +128,56 @@ Page({
   },
 
   /**
-   * 关于游戏
+   * 用户服务协议
    */
-  onShowAbout() {
-    this.setData({ showAboutModal: true });
+  onShowServiceAgreement() {
+    this.setData({
+      showInfoModal: true,
+      modalTitle: "用户服务协议",
+      modalContent: `本应用为户外安全教育工具，旨在提高用户的户外安全意识。
+
+1. 风险提示
+本游戏模拟了高海拔徒步的风险场景，包括但不限于失温、滑坠、迷路等。游戏中的生存机制（如体温、体力、水分）旨在模拟真实生理反应，但不可作为现实生存的绝对依据。
+
+2. 免责声明
+本游戏内容仅供娱乐和教育。开发者不对用户在现实生活中模仿游戏行为导致的任何后果负责。户外活动具有固有风险，请在专业指导下进行。
+
+3. 内容规范
+用户不得利用本游戏传播违法违规信息。
+
+4. 知识产权
+本游戏的所有素材、文本、代码均受版权保护。`,
+    });
   },
 
-  onCloseAbout() {
-    this.setData({ showAboutModal: false });
+  /**
+   * 隐私政策
+   */
+  onShowPrivacyPolicy() {
+    this.setData({
+      showInfoModal: true,
+      modalTitle: "隐私政策",
+      modalContent: `信息收集：仅收集游戏进度、成就等必要数据以提供游戏服务。
+
+1. 数据收集范围
+- 游戏进度：包括当前关卡、角色状态、物品栏等，用于存档功能。
+- 成就数据：用于记录您的游戏里程碑。
+- 设置偏好：如通过音乐开关设置的状态。
+
+2. 数据存储
+所有数据仅存储在您的设备本地（微信小程序本地缓存）。我们不搭建服务器，不上传您的任何个人数据。
+
+3. 权限使用
+- 音频播放：用于播放背景音乐和音效。
+- 用户信息：本游戏不获取您的微信昵称、头像等个人信息。
+
+4. 第三方服务
+本游戏基于微信小程序平台运行，相关基础设施由腾讯提供。`,
+    });
+  },
+
+  onCloseInfoModal() {
+    this.setData({ showInfoModal: false });
   },
 
   /**

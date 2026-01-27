@@ -242,27 +242,31 @@
   font-size: 36rpx;
 }
 
-.about-link {
+.agreements-area {
   margin-top: 20rpx;
   display: flex;
   align-items: center;
-  gap: 12rpx;
+  justify-content: center;
+  flex-wrap: wrap;
   padding: 16rpx 32rpx;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
-.about-link:active {
-  opacity: 1;
+.agreement-text {
+  font-size: 24rpx;
+  color: #888;
 }
 
-.link-icon {
-  font-size: 28rpx;
-}
-.link-text {
-  font-size: 26rpx;
+.agreement-link {
+  font-size: 24rpx;
   color: #aaa;
   text-decoration: underline;
-  text-underline-offset: 4rpx;
+  margin: 0 4rpx;
+  padding: 8rpx 0;
+}
+
+.agreement-link:active {
+  color: #fff;
 }
 
 /* 底部警告 */

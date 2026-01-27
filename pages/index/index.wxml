@@ -31,7 +31,7 @@
         <text class="separator">——</text>
       </view>
       <view class="title-quote">
-        "我们征服不了任何一座山，\n只是山放过了我们而已。"
+        "我们征服不了任何一座山，只是山放过了我们而已。"
       </view>
     </view>
 
@@ -58,9 +58,11 @@
         </view>
       </button>
       
-      <view class="about-link" bindtap="onShowAbout">
-        <text class="link-icon">📜</text>
-        <text class="link-text">关于游戏</text>
+      <view class="agreements-area">
+        <text class="agreement-text">查看</text>
+        <text class="agreement-link" bindtap="onShowServiceAgreement">《用户服务协议》</text>
+        <text class="agreement-text">和</text>
+        <text class="agreement-link" bindtap="onShowPrivacyPolicy">《隐私政策》</text>
       </view>
     </view>
     
@@ -70,16 +72,15 @@
     </view>
   </view>
   
-  <!-- 关于游戏弹窗 -->
-  <view wx:if="{{showAboutModal}}" class="modal-overlay">
+  <!-- 信息弹窗 -->
+  <view wx:if="{{showInfoModal}}" class="modal-overlay">
     <view class="modal-content">
-      <text class="modal-title">关于《徒步鳌太线》</text>
-      <text class="modal-text" style="white-space: pre-wrap;">这是一个关于生存与挑战的文字冒险游戏。
-致敬所有勇敢的攀登者。
-
-根据真实路线改编，请敬畏自然。</text>
+      <text class="modal-title">{{modalTitle}}</text>
+      <scroll-view scroll-y style="max-height: 50vh; width: 100%; margin-bottom: 30rpx;">
+        <text class="modal-text" style="white-space: pre-wrap; display: block; text-align: left;">{{modalContent}}</text>
+      </scroll-view>
       <view class="modal-actions">
-        <view class="modal-btn confirm" bindtap="onCloseAbout">
+        <view class="modal-btn confirm" bindtap="onCloseInfoModal">
           <text class="modal-btn-text highlight">了解</text>
         </view>
       </view>
