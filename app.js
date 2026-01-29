@@ -1,15 +1,30 @@
 // 设置所有页面可分享
+// 保存原始的 Page 构造函数
 const originalPage = Page;
+
+// 重写 Page
 Page = function (pageConfig) {
-  // 如果页面没定义分享函数，我们就给它补一个默认的
+  // 1. 自动注入：发送给朋友
   if (!pageConfig.onShareAppMessage) {
     pageConfig.onShareAppMessage = function () {
       return {
-        title: "坚持不懈，你一定能成功！",
-        path: "/pages/index/index",
+        title: "我的领薪单/文字冒险小程序",
+        path: "/pages/index/index", // 统一跳回首页
       };
     };
   }
+
+  // 2. 自动注入：分享到朋友圈 (点亮第二个图标)
+  if (!pageConfig.onShareTimeline) {
+    pageConfig.onShareTimeline = function () {
+      return {
+        title: "快来看看我的领薪记录",
+        query: "from=timeline", // 朋友圈只能传 query
+      };
+    };
+  }
+
+  // 调用原始的 Page 构造函数
   return originalPage(pageConfig);
 };
 
