@@ -17,7 +17,8 @@ Page({
     bgImage: "",
   },
 
-  onLoad() {
+  onLoad(option) {
+    this.goin(option);
     this.setData({
       bgImage: `${STATIC_BASE_URL}/back_ground.png`,
     });
@@ -195,5 +196,27 @@ Page({
     wx.navigateTo({
       url: "/pages/character/character",
     });
+  },
+
+  goin() {
+    const { targetPage } = options;
+    if (targetPage) {
+      // 提取除了 targetPage 之外的其他所有参数
+      const queryParams = Object.keys(options)
+        .filter((key) => key !== "targetPage")
+        .map((key) => `${key}=${options[key]}`)
+        .join("&");
+
+      const finalUrl = `${targetPage}?${queryParams}`;
+
+      // 使用 reLaunch 或 navigateTo 跳转
+      wx.navigateTo({
+        url: finalUrl,
+        fail: () => {
+          // 如果跳转失败（比如路径不对），就留在首页
+          wx.showToast({ title: "页面路径错误", icon: "none" });
+        },
+      });
+    }
   },
 });
