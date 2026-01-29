@@ -198,7 +198,7 @@ Page({
     });
   },
 
-  goin() {
+  goin(options) {
     const { targetPage } = options;
     if (targetPage) {
       // 提取除了 targetPage 之外的其他所有参数
