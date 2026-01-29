@@ -8,7 +8,7 @@ Page = function (pageConfig) {
   if (!pageConfig.onShareAppMessage) {
     pageConfig.onShareAppMessage = function () {
       return {
-        title: "我的领薪单/文字冒险小程序",
+        title: "坚持不懈，你一定能成功！",
         path: "/pages/index/index", // 统一跳回首页
       };
     };
@@ -18,7 +18,7 @@ Page = function (pageConfig) {
   if (!pageConfig.onShareTimeline) {
     pageConfig.onShareTimeline = function () {
       return {
-        title: "快来看看我的领薪记录",
+        title: "坚持不懈，你一定能成功！",
         query: "from=timeline", // 朋友圈只能传 query
       };
     };
